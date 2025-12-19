@@ -122,17 +122,9 @@
   }
 }
 
-
-.hero{
-  height: 100vh;
-  width: 100%;
-  background-image: url("/dried-flowers-vase-blue-wall.jpg");
-  position: relative;
-  padding-top: 27;
-  background-size: auto;
+.backgroundimage{
+  background-image: url('/light-brown-color-solid-background-1920x1080.png');
+  background-size: cover;
   background-position: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  background-repeat: no-repeat;
 }
