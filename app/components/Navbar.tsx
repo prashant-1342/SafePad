@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import Login from "../pages/Login"
+
 
 export default function Navbar() {
   return (
