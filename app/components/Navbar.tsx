@@ -21,7 +21,7 @@ export default function Navbar() {
           </Button>
         </Link>
 
-        <Link href="/login">
+        <Link href="/auth/login">
           <Button  className="bg-white text-black hover:bg-gray-300">
             Login
           </Button>
