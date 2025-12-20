@@ -44,37 +44,51 @@ export default function Login(){
     setLoading(false);
   };
 
- 
   return (
     <div className="flex items-center justify-center">
-    <form className="flex flex-col">
-      <label>
-        <span>Email</span>
-        <input
-         className="border-solid border-2"
-        type = "email"
-        onChange={(e)=>setEmail(e.target.value)}
-        required
-       
-        
-        />
-      </label>
-      <label>
-        <span>OTP</span>
-        <input
-        className="border-2"
-        onChange={(e)=>setOtp(e.target.value)}
-        required
-        />
+    <form onSubmit={handleVerifyOtp} className="flex flex-col">
+      {step === 1 && (
+        <>
+          <label>
+            <span>Email</span>
+            <input
+             className="border-solid border-2"
+            type="email"
+            value={email}
+            onChange={(e)=>setEmail(e.target.value)}
+            required
+            />
+          </label>
+          <Button 
+            type="button"
+            onClick={handleSendOtp}
+            disabled={loading}
+          >
+            {loading ? "Sending..." : "Send OTP"}
+          </Button>
+        </>
+      )}
 
-      </label>
-       <Button>
-          Send OTP
-        </Button>
-      <Button type="submit">
-        Log in
-      </Button>
-     
+      {step === 2 && (
+        <>
+          <label>
+            <span>OTP</span>
+            <input
+            className="border-2"
+            type="text"
+            value={otp}
+            onChange={(e)=>setOtp(e.target.value)}
+            required
+            />
+          </label>
+          <Button 
+            type="submit"
+            disabled={loading}
+          >
+            {loading ? "Verifying..." : "Log in"}
+          </Button>
+        </>
+      )}
     </form>
   </div>
   );
