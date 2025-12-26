@@ -1,9 +1,11 @@
 "use client"
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
 
 export default function Signup(){
+  const router = useRouter();
   const [name,setName] = useState("");
   const[email,setEmail] = useState("");
   const[masterpassword,setmasterpassword] = useState("");
@@ -13,7 +15,7 @@ export default function Signup(){
      e.preventDefault()
      setLoading(true);
      try{
-      const response = await fetch("api/auth/signup",{
+      const response = await fetch("/api/auth/signup",{
         method:"POST",
         headers:{
           "content-type":"application/json"
@@ -23,9 +25,13 @@ export default function Signup(){
       })
       const data = await response.json()
       console.log(data)
+      if (response.ok) {
+        router.push("/dashboard");
+      }
      }
      catch(error){
       console.log(error)
+      alert("Something went wrong")
      }
      finally{
       setLoading(false)
@@ -41,12 +47,21 @@ export default function Signup(){
         <h1>Create Account</h1>
         <input
         placeholder="Name"
+        value={name}
+        onChange={(e)=>setName(e.target.value)}
+        required
         />
         <input
         placeholder="Email"
+        value={email}
+        onChange={(e)=>setEmail(e.target.value)}
+        required
         />
         <input
         placeholder="Password"
+        value={masterpassword}
+        onChange={(e)=>setmasterpassword(e.target.value)}
+        required
         />
         <Button 
         onClick={handleSubmit}
