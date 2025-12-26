@@ -82,7 +82,7 @@ export default function Login(){
             />
           </label>
           <Button 
-            type="submit"
+            type="submit" 
             disabled={loading}
           >
             {loading ? "Verifying..." : "Log in"}

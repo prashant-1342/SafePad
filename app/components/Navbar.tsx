@@ -15,7 +15,7 @@ export default function Navbar() {
       <Link className="text-2xl" href="/contact">Contact</Link>
 </div>
       <div className="flex items-center gap-4">
-        <Link href="/dashboard">
+        <Link href="/auth/signup">
           <Button  className="text-white border-white hover:bg-white hover:text-black">
             Sign Up
           </Button>

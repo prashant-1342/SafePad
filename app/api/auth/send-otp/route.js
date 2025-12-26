@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
 const otpStore = new Map();
+const OTP_TTL_MS = 5 * 60 * 1000;
 
 export async function POST(req) {
   try {
@@ -16,7 +17,7 @@ export async function POST(req) {
 
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-    otpStore.set(email, otp);
+    otpStore.set(email, { otp, expiresAt: Date.now() + OTP_TTL_MS });
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -41,7 +42,7 @@ export async function POST(req) {
 
     return NextResponse.json({ message: "OTP sent successfully" });
 
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { error: "Failed to send OTP" },
       { status: 500 }
