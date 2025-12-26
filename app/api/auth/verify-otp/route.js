@@ -8,7 +8,6 @@ export async function POST(req) {
     if (!email || !otp) {
       return NextResponse.json(
         { error: "Email and OTP are required" },
-        alert("email and otp are required"),
         { status: 400 }
       );
     }
@@ -42,7 +41,7 @@ export async function POST(req) {
     otpStore.delete(email);
 
     return NextResponse.json({ message: "OTP verified successfully" });
-  } catch (_error) {
+  } catch (error) {
     return NextResponse.json(
       { error: "Failed to verify OTP" },
       { status: 500 }

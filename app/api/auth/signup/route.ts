@@ -1,20 +1,45 @@
 import { NextResponse } from "next/server";
-
-export async function POST(request: Request) {
+import {db} from "@/app/lib/db";
+import bcrypt from "bcrypt"
+export const runtime = "nodejs";
+export async function POST(request:Request) {
   try {
     const body = await request.json();
-    const { name, email, masterpassword } = body;
+    const { name, email, master_password } = body;
 
+    if(!name || !email || !master_password){
+      return NextResponse.json(
+        {message:"All field are required"},
+        {status : 400},
+      );
+    }
 
-    console.log("Signup Request Received!");
-    console.log("Name:", name);
-    console.log("Email:", email);
-    console.log("Master Password:", masterpassword);
+    const hashedpassword = await bcrypt.hash(master_password,10);
 
-    return NextResponse.json({ message: "User registered successfully (Mock)" }, { status: 201 });
-  } catch (error) {
+    await db.execute(
+   "INSERT INTO users (name, email, hashedpassword) VALUES (?, ?, ?)",
+      [name,email,hashedpassword]
+    );
+
+    return NextResponse.json(
+    {message:"user registered successfully"},
+      {status:201},
+    );
+  } catch (error:any) {
     console.error("Signup error:", error);
-    return NextResponse.json({ message: "Error registering user" }, { status: 500 });
+   if(error.code === "ER_DUP_ENTRY"){
+     return NextResponse.json(
+      {message:"Email already exists"},
+      {status:409}
+     );
+   }
   }
+
+  return NextResponse.json(
+    {message: "Error registering user"},
+    {status:500}
+  );
+
+
 }
 
