@@ -5,17 +5,16 @@ export const runtime = "nodejs";
 export async function POST(request:Request) {
   try {
     const body = await request.json();
-    const { name, email, master_password } = body;
+    const { name, email, masterpassword } = body;
 
-    if(!name || !email || !master_password){
+    if(!name || !email || !masterpassword){
       return NextResponse.json(
         {message:"All field are required"},
         {status : 400},
       );
     }
 
-    const hashedpassword = await bcrypt.hash(master_password,10);
-
+    const hashedpassword = await bcrypt.hash(masterpassword,10);
     await db.execute(
    "INSERT INTO users (name, email, hashedpassword) VALUES (?, ?, ?)",
       [name,email,hashedpassword]
@@ -39,7 +38,5 @@ export async function POST(request:Request) {
     {message: "Error registering user"},
     {status:500}
   );
-
-
 }
 

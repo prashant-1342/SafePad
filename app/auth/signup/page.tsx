@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
-
 export default function Signup(){
   const router = useRouter();
   const [name,setName] = useState("");
@@ -21,11 +20,11 @@ export default function Signup(){
           "content-type":"application/json"
         },
         body:JSON.stringify({name,email,masterpassword})
-        
       })
       const data = await response.json()
       console.log(data)
       if (response.ok) {
+        alert('Registration successfull')
         router.push("/dashboard");
       }
      }
@@ -36,9 +35,6 @@ export default function Signup(){
      finally{
       setLoading(false)
      }
-     
-
-
   }
 
   return (
@@ -70,8 +66,6 @@ export default function Signup(){
           Sign Up
         </Button> 
       </form>
-     
     </div>
-
   );
 }
