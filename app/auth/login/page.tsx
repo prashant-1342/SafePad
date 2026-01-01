@@ -1,12 +1,16 @@
 "use client"
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+
 
 export default function Login(){
+  const router = useRouter()
   const [email,setEmail] = useState("");
   const [otp,setOtp] = useState("");
-  const[step,setStep] = useState<1 | 2>(1);
+  const[step,setStep] = useState<1 | 2 | 3>(1);
   const[loading,setLoading] = useState(false)
+  const[masterpassword,setmasterpassword] = useState("")
 
   const handleSendOtp = async ()=>{
     setLoading(true);
@@ -15,14 +19,42 @@ export default function Login(){
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({email})
     });
+    
+    if(res.status == 404){
+      alert("User does not exist")
+      setLoading(false);
+      return;
+    }
 
     if(res.ok){
       setStep(2);
     }
+
     else{
       alert("Failed to sent otp")
     }
     setLoading(false);
+  }
+
+  const handleVerifyMasterPassword = async (e:React.FormEvent)=>{
+    e.preventDefault();
+    setLoading(true);
+    const res = await fetch("/api/auth/verify-masterpassword",{
+      method:"POST",
+      headers:{"Content-type":"application/json"},
+      body: JSON.stringify({email,masterpassword})  
+    })
+
+    if(res.ok){
+      alert("Login Successful")
+      setLoading(false);
+      router.push("/dashboard");
+    }
+    else{
+      alert("Wrong MasterPassword");
+      setLoading(false);
+      }
+  
   }
 
   const handleVerifyOtp = async (e:React.FormEvent)=>{
@@ -36,7 +68,8 @@ export default function Login(){
     });
 
     if(res.ok){
-      alert("Login successful");
+      setStep(3)
+     
     }
     else{
       alert("Unseccesful");
@@ -44,9 +77,21 @@ export default function Login(){
     setLoading(false);
   };
 
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (step === 1) {
+      handleSendOtp();
+    } else if (step === 2) {
+      handleVerifyOtp(e);
+    } else if (step === 3) {
+      handleVerifyMasterPassword(e);
+    }
+  };
+
   return (
     <div className="flex items-center justify-center">
-    <form onSubmit={handleVerifyOtp} className="flex flex-col">
+    <form onSubmit={handleSubmit} className="flex flex-col">
       {step === 1 && (
         <>
           <label>
@@ -86,6 +131,26 @@ export default function Login(){
             disabled={loading}
           >
             {loading ? "Verifying..." : "Log in"}
+          </Button>
+        </>
+      )}
+      {step === 3 && (
+        <>
+          <label>
+            <span>Master Password</span>
+            <input
+            className="border-2"
+            type="text"
+            onChange={(e)=>setmasterpassword(e.target.value)}
+            value = {masterpassword}  
+            required
+            />
+          </label>
+          <Button 
+            type="submit" 
+            disabled={loading}
+          >
+            {loading ? "Verifying..." : "Verify"}
           </Button>
         </>
       )}

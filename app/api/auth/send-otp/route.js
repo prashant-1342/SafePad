@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import {db} from "@/app/lib/db";
 
 const otpStore = new Map();
 const OTP_TTL_MS = 5 * 60 * 1000;
@@ -12,6 +13,18 @@ export async function POST(req) {
       return NextResponse.json(
         { error: "Email is required" },
         { status: 400 }
+      );
+    }
+
+    const [rows] = await db.execute(
+    "SELECT * from users where email = ?",
+    [email]
+    )
+
+    if(rows.length == 0){
+      return NextResponse.json(
+        { error: "User does not exist" },
+        { status: 404 }
       );
     }
 
