@@ -47,6 +47,8 @@ export default function Login(){
 
     if(res.ok){
       alert("Login Successful")
+      localStorage.setItem("userEmail", email);
+      sessionStorage.setItem("masterPassword", masterpassword);
       setLoading(false);
       router.push("/dashboard");
     }
