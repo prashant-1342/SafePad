@@ -14,29 +14,32 @@ export async function POST(request:Request) {
       );
     }
 
+    const [user]:any = await db.query(
+      "SELECT * FROM users WHERE email = ?",
+      [email]
+    );
+    if(user.length > 0){
+      return NextResponse.json(
+        {message:"User already exists"},
+        {status : 409},
+      );
+    }
     const hashedpassword = await bcrypt.hash(masterpassword,10);
-    await db.execute(
+    await db.query(
    "INSERT INTO users (name, email, hashedpassword) VALUES (?, ?, ?)",
       [name,email,hashedpassword]
     );
-
     return NextResponse.json(
-    {message:"user registered successfully"},
+    {message:"user registered successfully",user},
       {status:201},
     );
   } catch (error:any) {
-    console.error("Signup error:", error);
-   if(error.code === "ER_DUP_ENTRY"){
-     return NextResponse.json(
-      {message:"Email already exists"},
-      {status:409}
-     );
-   }
+  console.error("Signup error:", error);
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    );
   }
 
-  return NextResponse.json(
-    {message: "Error registering user"},
-    {status:500}
-  );
 }
 

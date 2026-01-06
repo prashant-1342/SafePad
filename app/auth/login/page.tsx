@@ -89,7 +89,7 @@ export default function Login() {
 
   return (
     <div className="flex h-screen w-full bg-login-bg text-white overflow-hidden font-sans">
-      {/* Left Decoration - Hidden on Mobile */}
+     
       <div className="hidden lg:flex w-1/2 relative bg-black items-center justify-center">
         <div className="absolute inset-0 z-0">
           <Image
@@ -126,7 +126,7 @@ export default function Login() {
         </div>
       </div>
 
-      {/* Right Form - Full Width on Mobile */}
+      
       <div className="flex w-full lg:w-1/2 items-center justify-center p-8 bg-login-card">
         <div className="w-full max-w-md space-y-8">
           <div className="text-center lg:text-left">

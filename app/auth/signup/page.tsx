@@ -24,16 +24,21 @@ export default function Signup() {
         body: JSON.stringify({ name, email, masterpassword: masterPassword }),
       });
       const data = await response.json();
-      console.log(data);
-      if (response.ok) {
-        alert("Registration successful");
+      if (response.status === 201) {
+        alert(data.message || "Registration successful");
         router.push("/dashboard");
-      } else {
-         alert(data.message || "Registration failed");
+      } 
+      else if(response.status === 400 || response.status === 409){
+        alert(data.message)
+      }
+      else{
+        alert(data.message || 
+          "Something went wrong"
+        )
       }
     } catch (error) {
       console.log(error);
-      alert("Something went wrong");
+      alert("Network error");
     } finally {
       setLoading(false);
     }
@@ -41,7 +46,6 @@ export default function Signup() {
 
   return (
     <div className="flex h-screen w-full bg-login-bg text-white overflow-hidden font-sans">
-      {/* Left Decoration - Hidden on Mobile */}
       <div className="hidden lg:flex w-1/2 relative bg-black items-center justify-center">
         <div className="absolute inset-0 z-0">
           <Image
@@ -78,7 +82,7 @@ export default function Signup() {
         </div>
       </div>
 
-      {/* Right Form - Full Width on Mobile */}
+     
       <div className="flex w-full lg:w-1/2 items-center justify-center p-8 bg-login-card">
         <div className="w-full max-w-md space-y-8">
           <div className="text-center lg:text-left">
