@@ -42,6 +42,13 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* Custom Login Theme Colors */
+  --color-login-bg: #1A1F2B;
+  --color-login-card: #151923;
+  --color-login-input: #1A1F2B;
+  --color-login-border: #3e4451;
+  --color-login-hover: #3e4451;
 }
 
 :root {

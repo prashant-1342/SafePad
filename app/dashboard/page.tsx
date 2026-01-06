@@ -53,21 +53,15 @@ export default function Dashboard() {
     item_metadata: {}
   });
   const [saving, setSaving] = useState(false);
-
   const [genContext, setGenContext] = useState<"modal-new" | "modal-edit" | "standalone">("standalone"); 
   const [genTab, setGenTab] = useState<"password" | "passphrase" | "username">("password");
-  
- 
   const [genLength, setGenLength] = useState(16);
   const [genUseUpper, setGenUseUpper] = useState(true);
   const [genUseNumbers, setGenUseNumbers] = useState(true);
   const [genUseSymbols, setGenUseSymbols] = useState(true);
-  
   const [ppWordCount, setPpWordCount] = useState(4);
   const [ppSeparator, setPpSeparator] = useState("-");
   const [ppCapitalize, setPpCapitalize] = useState(false);
-  
- 
   const [unIncludeNumber, setUnIncludeNumber] = useState(true);
   const [generatedResult, setGeneratedResult] = useState("");
 
