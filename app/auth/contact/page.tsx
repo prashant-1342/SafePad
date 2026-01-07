@@ -13,26 +13,38 @@ export default function ContactPage() {
     e.preventDefault();
     setLoading(true);
 
-    setTimeout(() => {
-      alert("Thanks for reaching out. We'll get back to you soon.");
-      setName("");
-      setEmail("");
-      setMessage("");
-      setLoading(false);
-    }, 900);
+    try {
+      const res = await fetch("/api/auth/contactAuth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
+      });
+
+      if (res.ok) {
+        alert("Thanks for reaching out. We'll get back to you soon.");
+        setName("");
+        setEmail("");
+        setMessage("");
+      } else {
+        alert("Failed to send message");
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Something went wrong");
+    }
+
+    setLoading(false);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 flex items-center justify-center px-6">
       <div className="w-full max-w-4xl bg-white rounded-xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
-
         <div className="p-8 bg-black text-white flex flex-col justify-center">
           <h1 className="text-3xl font-bold">Contact SafePad</h1>
           <p className="mt-4 text-gray-300">
             Questions, feedback, or security concerns — reach out to us anytime.
             SafePad is built with transparency and user trust at its core.
           </p>
-
           <div className="mt-6 space-y-2 text-sm text-gray-400">
             <p>Email: support@safepad.dev</p>
             <p>Security: security@safepad.dev</p>
@@ -73,7 +85,6 @@ export default function ContactPage() {
             </Button>
           </form>
         </div>
-
       </div>
     </div>
   );
