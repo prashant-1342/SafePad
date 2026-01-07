@@ -12,7 +12,7 @@ export default function Navbar() {
         SafePad
       </Link>
       <Link className="text-2xl" href="/auth/features">Features</Link>
-      <Link className="text-2xl" href="/contact">Contact</Link>
+      <Link className="text-2xl" href="/auth/contact">Contact</Link>
 </div>
       <div className="flex items-center gap-4">
         <Link href="/auth/signup">
