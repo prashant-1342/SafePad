@@ -11,7 +11,7 @@ export default function Navbar() {
       <Link href="/" className="text-2xl font-bold tracking-wide">
         SafePad
       </Link>
-      <Link className="text-2xl" href="/features">Features</Link>
+      <Link className="text-2xl" href="/auth/features">Features</Link>
       <Link className="text-2xl" href="/contact">Contact</Link>
 </div>
       <div className="flex items-center gap-4">
