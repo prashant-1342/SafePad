@@ -16,12 +16,12 @@ export async function POST(req) {
       );
     }
 
-    const [rows] = await db.execute(
-    "SELECT * from users where email = ?",
+    const result = await db.query(
+    "SELECT * from users where email = $1",
     [email]
     )
 
-    if(rows.length == 0){
+    if(result.rows.length == 0){
       return NextResponse.json(
         { error: "User does not exist" },
         { status: 404 }

@@ -14,11 +14,11 @@ export async function POST(request:Request) {
       );
     }
 
-    const [user]:any = await db.query(
-      "SELECT * FROM users WHERE email = ?",
+    const result:any = await db.query(
+      "SELECT * FROM users WHERE email = $1",
       [email]
     );
-    if(user.length > 0){
+    if(result.rows.length > 0){
       return NextResponse.json(
         {message:"User already exists"},
         {status : 409},
@@ -26,11 +26,11 @@ export async function POST(request:Request) {
     }
     const hashedpassword = await bcrypt.hash(masterpassword,10);
     await db.query(
-   "INSERT INTO users (name, email, hashedpassword) VALUES (?, ?, ?)",
-      [name,email,hashedpassword]
+   "INSERT INTO users (name, email, hashedpassword) VALUES ($1, $2, $3)",
+      [name,email,hashedpassword] 
     );
     return NextResponse.json(
-    {message:"user registered successfully",user},
+    {message:"user registered successfully"},
       {status:201},
     );
   } catch (error:any) {

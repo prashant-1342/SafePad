@@ -50,12 +50,12 @@ export default function Home() {
               </p>
 
               <div className="flex flex-wrap items-center gap-4">
-                <Link href="/register">
+                <Link href="/auth/signup">
                   <Button className="h-12 rounded-xl bg-[#5ee7df] px-6 text-base font-semibold text-[#04070f] transition hover:-translate-y-0.5 hover:bg-[#53d6cf]">
                     Create free account
                   </Button>
                 </Link>
-                <Link href="/login">
+                <Link href="/auth/login">
                   <Button variant="outline" className="h-12 rounded-xl border-white/20 bg-white/5 px-6 text-base font-semibold text-white transition hover:border-white/40 hover:bg-white/10">
                     Already have an account?
                   </Button>

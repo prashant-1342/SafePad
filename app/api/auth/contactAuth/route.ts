@@ -12,8 +12,8 @@ export async function POST(req: Request) {
   }
 
   try {
-    await db.execute(
-      "INSERT INTO contact (name, email, message) VALUES (?, ?, ?)",
+    await db.query(
+      "INSERT INTO contact (name, email, message) VALUES ($1, $2 , $3)",
       [name, email, message]
     );
 

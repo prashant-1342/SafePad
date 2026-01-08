@@ -8,7 +8,7 @@ export async function POST(req){
        return NextResponse.json({"Message":"Missing email or masterpassword"},{status:400})
      }
     try{
-        const [rows] = await db.execute("Select * from users where email = ?",[email]);
+        const [rows] = await db.query("Select * from users where email = $1",[email]);
         if(rows.length === 0){
             return NextResponse.json({"Message":"User not found"},{status:404})
         }
@@ -17,13 +17,12 @@ export async function POST(req){
         if(!isPasswordCorrect){
             return NextResponse.json("Invalid Password",{status : 401})
         }
-     
+       delete user.hashedpassword;
        return NextResponse.json({
         "Message":"Success",
-        "user":user
-       })     
-        
-
+        user
+       },
+    {status : 200})     
     }
     catch(err){
         console.error(err);

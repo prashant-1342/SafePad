@@ -10,7 +10,7 @@ export async function POST(request: Request) {
 
     const createTableQuery = `
       CREATE TABLE IF NOT EXISTS items (
-        id INT AUTO_INCREMENT PRIMARY KEY,
+        id SERIAL PRIMARY KEY,
         user_email VARCHAR(255) NOT NULL,
         name VARCHAR(255) NOT NULL,
         username TEXT,
@@ -22,26 +22,26 @@ export async function POST(request: Request) {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `;
-    await db.execute(createTableQuery);
+    await db.query(createTableQuery);
 
     try {
-        await db.execute("ALTER TABLE items ADD COLUMN notes TEXT");
+        await db.query("ALTER TABLE items ADD COLUMN IF NOT EXISTS notes TEXT");
     } catch (e: any) {
-        if (e.code !== 'ER_DUP_FIELDNAME') throw e;
+        // Column might already exist
     }
 
     try {
-        await db.execute("ALTER TABLE items MODIFY COLUMN item_metadata TEXT");
+        await db.query("ALTER TABLE items ALTER COLUMN item_metadata TYPE TEXT");
     } catch (e: any) {
-        
+        // Type might already be correct
     }
 
     const insertQuery = `
       INSERT INTO items (user_email, name, username, password, url, type, notes, item_metadata)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
     `;
     
-    await db.execute(insertQuery, [user_email, name, username, password, url, type, notes, metadataString]);
+    await db.query(insertQuery, [user_email, name, username, password, url, type, notes, metadataString]);
 
     return NextResponse.json({ message: "Item added successfully" }, { status: 201 });
   } catch (error) {
@@ -59,9 +59,9 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
 
-    await db.execute(`
+    await db.query(`
       CREATE TABLE IF NOT EXISTS items (
-        id INT AUTO_INCREMENT PRIMARY KEY,
+        id SERIAL PRIMARY KEY,
         user_email VARCHAR(255) NOT NULL,
         name VARCHAR(255) NOT NULL,
         username TEXT,
@@ -75,18 +75,19 @@ export async function GET(request: Request) {
     `);
 
     try {
-        await db.execute("ALTER TABLE items ADD COLUMN notes TEXT");
+        await db.query("ALTER TABLE items ADD COLUMN IF NOT EXISTS notes TEXT");
     } catch (e: any) {
-        if (e.code !== 'ER_DUP_FIELDNAME') throw e;
+        // Column might already exist
     }
 
     try {
-         await db.execute("ALTER TABLE items MODIFY COLUMN item_metadata TEXT");
+         await db.query("ALTER TABLE items ALTER COLUMN item_metadata TYPE TEXT");
     } catch (e: any) {
+        // Type might already be correct
     }
 
-    const [rows] = await db.execute("SELECT * FROM items WHERE user_email = ? ORDER BY created_at DESC", [email]);
-    return NextResponse.json(rows);
+    const result:any = await db.query("SELECT * FROM items WHERE user_email = $1 ORDER BY created_at DESC", [email]);
+    return NextResponse.json(result.rows);
   } catch (error) {
     console.error("Error fetching items:", error);
     return NextResponse.json({ error: "Failed to fetch items" }, { status: 500 });
@@ -105,18 +106,18 @@ export async function PUT(request: Request) {
         const metadataString = typeof item_metadata === 'string' ? item_metadata : JSON.stringify(item_metadata);
 
         try {
-            await db.execute("ALTER TABLE items MODIFY COLUMN item_metadata TEXT");
+            await db.query("ALTER TABLE items ALTER COLUMN item_metadata TYPE TEXT");
         } catch (e: any) {
-            if (e.code !== 'ER_DUP_FIELDNAME') throw e;
+            // Type might already be correct
         }
     
         const updateQuery = `
             UPDATE items 
-            SET name=?, username=?, password=?, url=?, type=?, notes=?, item_metadata=?
-            WHERE id=? AND user_email=?
+            SET name=$1, username=$2, password=$3, url=$4, type=$5, notes=$6, item_metadata=$7
+            WHERE id=$8 AND user_email=$9
         `;
     
-        await db.execute(updateQuery, [name, username, password, url, type, notes, metadataString, id, user_email]);
+        await db.query(updateQuery, [name, username, password, url, type, notes, metadataString, id, user_email]);
     
         return NextResponse.json({ message: "Item updated successfully" });
     } catch (error: any) {
@@ -127,3 +128,4 @@ export async function PUT(request: Request) {
         }, { status: 500 });
     }
 }
+
