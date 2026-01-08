@@ -27,13 +27,13 @@ export async function POST(request: Request) {
     try {
         await db.query("ALTER TABLE items ADD COLUMN IF NOT EXISTS notes TEXT");
     } catch (e: any) {
-        // Column might already exist
+      
     }
 
     try {
         await db.query("ALTER TABLE items ALTER COLUMN item_metadata TYPE TEXT");
     } catch (e: any) {
-        // Type might already be correct
+      
     }
 
     const insertQuery = `
@@ -77,13 +77,13 @@ export async function GET(request: Request) {
     try {
         await db.query("ALTER TABLE items ADD COLUMN IF NOT EXISTS notes TEXT");
     } catch (e: any) {
-        // Column might already exist
+       
     }
 
     try {
          await db.query("ALTER TABLE items ALTER COLUMN item_metadata TYPE TEXT");
     } catch (e: any) {
-        // Type might already be correct
+   
     }
 
     const result:any = await db.query("SELECT * FROM items WHERE user_email = $1 ORDER BY created_at DESC", [email]);
@@ -108,7 +108,7 @@ export async function PUT(request: Request) {
         try {
             await db.query("ALTER TABLE items ALTER COLUMN item_metadata TYPE TEXT");
         } catch (e: any) {
-            // Type might already be correct
+          
         }
     
         const updateQuery = `
