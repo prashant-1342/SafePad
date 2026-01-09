@@ -8,7 +8,8 @@ export async function POST(req){
        return NextResponse.json({"Message":"Missing email or masterpassword"},{status:400})
      }
     try{
-        const [rows] = await db.query("Select * from users where email = $1",[email]);
+        const result = await db.query("Select * from users where email = $1",[email]);
+        const rows = result.rows;
         if(rows.length === 0){
             return NextResponse.json({"Message":"User not found"},{status:404})
         }

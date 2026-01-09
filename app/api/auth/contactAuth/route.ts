@@ -12,16 +12,17 @@ export async function POST(req: Request) {
   }
 
   try {
+     console.time("api");
     await db.query(
       "INSERT INTO contact (name, email, message) VALUES ($1, $2 , $3)",
       [name, email, message]
     );
-
+    console.timeEnd("api");
     return NextResponse.json(
-      { message: "Success" },
+      { message: "Success" }, 
       { status: 200 }
     );
-  } catch (err) {
+  } catch (err) { 
     console.error(err);
     return NextResponse.json(
       { message: "Internal Server Error" },
