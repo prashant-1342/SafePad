@@ -9,39 +9,67 @@ export default function Signup() {
   const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [masterPassword, setMasterPassword] = useState("");
+  const [masterpassword, setMasterPassword] = useState("");
+  const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [isOtpVerified, setIsOtpVerified] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSendOtp = async () => {
+    if (!email) return;
+
     setLoading(true);
-    try {
-      const response = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({ name, email, masterpassword: masterPassword }),
-      });
-      const data = await response.json();
-      if (response.status === 201) {
-        alert(data.message || "Registration successful");
-        router.push("/dashboard");
-      } 
-      else if(response.status === 400 || response.status === 409){
-        alert(data.message)
-      }
-      else{
-        alert(data.message || 
-          "Something went wrong"
-        )
-      }
-    } catch (error) {
-      console.log(error);
-      alert("Network error");
-    } finally {
-      setLoading(false);
+    const res = await fetch("/api/auth/send-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+
+    if (res.status === 201) setOtpSent(true);
+    if (res.status === 200) alert("Email already registered");
+    setLoading(false);
+  };
+
+  const handleVerifyOtp = async () => {
+    if (!otp) return;
+    setLoading(true);
+    const verify = await fetch("/api/auth/verify-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, otp }),
+    });
+
+    if (verify.ok) {
+      setIsOtpVerified(true);
+      alert("OTP verified successfully!");
+    } else {
+      alert("Invalid OTP");
     }
+    setLoading(false);
+  };
+
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isOtpVerified) return;
+
+    setLoading(true);
+
+    const signup = await fetch("/api/auth/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name,
+        email,
+        masterpassword,
+      }),
+    });
+
+    if (signup.status === 201) {
+      localStorage.setItem("userEmail", email);
+      router.push("/dashboard");
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -82,17 +110,16 @@ export default function Signup() {
         </div>
       </div>
 
-     
       <div className="flex w-full lg:w-1/2 items-center justify-center p-8 bg-login-card">
         <div className="w-full max-w-md space-y-8">
           <div className="text-center lg:text-left">
             <h2 className="text-3xl font-bold">Create Account</h2>
             <p className="mt-2 text-gray-400 text-sm">
-              Sign up to get started.
+              Sign up to get started with secure password management.
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSignup} className="space-y-4">
             <div className="space-y-2">
               <label htmlFor="name" className="text-sm font-medium text-gray-300">
                 Name
@@ -112,16 +139,68 @@ export default function Signup() {
               <label htmlFor="email" className="text-sm font-medium text-gray-300">
                 Email
               </label>
-              <input
-                id="email"
-                type="email"
-                placeholder="mail@website.com"
-                className="w-full h-12 px-4 rounded-lg bg-login-input border border-gray-600 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+              <div className="flex gap-2">
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="mail@website.com"
+                  className="flex-1 h-12 px-4 rounded-lg bg-login-input border border-gray-600 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  disabled={otpSent}
+                />
+                <Button
+                  type="button"
+                  onClick={handleSendOtp}
+                  disabled={loading || otpSent || !email}
+                  className="h-12 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors duration-200"
+                >
+                  {otpSent ? "✓ Sent" : "Send OTP"}
+                </Button>
+              </div>
+              {otpSent && (
+                <p className="text-xs text-green-400">
+                  OTP sent to {email}. Check your inbox!
+                </p>
+              )}
             </div>
+
+            {otpSent && (
+              <div className="space-y-2 animate-in fade-in slide-in-from-right-8 duration-300">
+                <label htmlFor="otp" className="text-sm font-medium text-gray-300">
+                  Enter OTP
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    id="otp"
+                    type="text"
+                    placeholder="123456"
+                    className="flex-1 h-12 px-4 rounded-lg bg-login-input border border-gray-600 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all tracking-widest text-center text-xl"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    required
+                    maxLength={6}
+                    disabled={isOtpVerified}
+                  />
+                  {!isOtpVerified && (
+                    <Button
+                      type="button"
+                      onClick={handleVerifyOtp}
+                      disabled={loading || !otp}
+                      className="h-12 px-4 bg-green-600 hover:bg-green-700 text-white font-medium transition-colors duration-200"
+                    >
+                      Verify
+                    </Button>
+                  )}
+                  {isOtpVerified && (
+                    <div className="h-12 px-4 flex items-center justify-center bg-green-900/30 text-green-400 rounded-lg border border-green-500/50 font-medium">
+                      ✓ Verified
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
 
             <div className="space-y-2">
               <label htmlFor="masterpassword" className="text-sm font-medium text-gray-300">
@@ -132,19 +211,31 @@ export default function Signup() {
                 type="password"
                 placeholder="Min. 8 characters"
                 className="w-full h-12 px-4 rounded-lg bg-login-input border border-gray-600 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                value={masterPassword}
+                value={masterpassword}
                 onChange={(e) => setMasterPassword(e.target.value)}
                 required
+                minLength={8}
               />
             </div>
 
             <Button
               type="submit"
-              disabled={loading}
-              className="w-full h-12 bg-white text-black hover:bg-gray-200 font-bold text-base transition-colors duration-200"
+              disabled={loading || !isOtpVerified}
+              className="w-full h-12 bg-white text-black hover:bg-gray-200 font-bold text-base transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "Creating Account..." : "Sign Up"}
             </Button>
+
+            {!otpSent && (
+              <p className="text-xs text-gray-500 text-center">
+                Click "Send OTP" to verify your email before signing up
+              </p>
+            )}
+            {otpSent && !isOtpVerified && (
+              <p className="text-xs text-yellow-500 text-center font-medium">
+                Please verify your OTP before clicking Sign Up
+              </p>
+            )}
           </form>
 
           <p className="text-center text-xs text-gray-500 mt-8">
