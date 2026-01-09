@@ -12,6 +12,7 @@ export default function Navbar() {
       </Link>
       <Link className="text-sm font-medium hover:text-blue-400 transition" href="/auth/features">Features</Link>
       <Link className="text-sm font-medium hover:text-blue-400 transition" href="/auth/contact">Contact</Link>
+      <Link className="text-sm font-medium hover:text-blue-400 transition" href="/auth/extension">Browser Extension</Link>
 </div>
       <div className="flex items-center gap-4">
         <Link href="/auth/signup">
