@@ -8,10 +8,12 @@ export default function ContactPage() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<"success" | "error" | "">("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setStatus("");
 
     try {
       const res = await fetch("/api/auth/contactAuth", {
@@ -21,42 +23,50 @@ export default function ContactPage() {
       });
 
       if (res.ok) {
-        alert("Thanks for reaching out. We'll get back to you soon.");
+        setStatus("success");
         setName("");
         setEmail("");
         setMessage("");
       } else {
-        alert("Failed to send message");
+        setStatus("error");
       }
-    } catch (error) {
-      console.log(error);
-      alert("Something went wrong");
+    } catch {
+      setStatus("error");
     }
 
     setLoading(false);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 flex items-center justify-center px-6">
-      <div className="w-full max-w-4xl bg-white rounded-xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
-        <div className="p-8 bg-black text-white flex flex-col justify-center">
-          <h1 className="text-3xl font-bold">Contact SafePad</h1>
-          <p className="mt-4 text-gray-300">
-            Questions, feedback, or security concerns — reach out to us anytime.
-            SafePad is built with transparency and user trust at its core.
+    <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black flex items-center justify-center px-6">
+      <div className="w-full max-w-5xl rounded-2xl border border-white/10 bg-white/5 backdrop-blur overflow-hidden grid grid-cols-1 md:grid-cols-2 shadow-xl">
+
+        {/* Left */}
+        <div className="relative p-10 text-white flex flex-col justify-center bg-gradient-to-br from-blue-600/20 to-cyan-400/10">
+          <h1 className="text-4xl font-bold tracking-tight">
+            Contact <span className="text-blue-400">SafePad</span>
+          </h1>
+          <p className="mt-5 text-gray-300 leading-relaxed">
+            Questions, feedback, or security concerns?
+            We value transparency and responsible disclosure.
           </p>
-          <div className="mt-6 space-y-2 text-sm text-gray-400">
-            <p>Email: support@safepad.dev</p>
-            <p>Security: security@safepad.dev</p>
+
+          <div className="mt-8 space-y-2 text-sm text-gray-400">
+            <p>📧 support@safepad.dev</p>
+            <p>🔐 security@safepad.dev</p>
           </div>
         </div>
 
-        <div className="p-8">
-          <h2 className="text-xl font-semibold">Send a message</h2>
+        {/* Right */}
+        <div className="p-10">
+          <h2 className="text-2xl font-semibold text-white">
+            Send a message
+          </h2>
 
           <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
+
             <input
-              className="border rounded px-3 py-2"
+              className="rounded-lg bg-black/40 border border-white/10 px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Your name"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -64,8 +74,8 @@ export default function ContactPage() {
             />
 
             <input
-              className="border rounded px-3 py-2"
               type="email"
+              className="rounded-lg bg-black/40 border border-white/10 px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -73,16 +83,32 @@ export default function ContactPage() {
             />
 
             <textarea
-              className="border rounded px-3 py-2 resize-none h-28"
+              className="rounded-lg bg-black/40 border border-white/10 px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none h-32"
               placeholder="Your message"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               required
             />
 
-            <Button type="submit" disabled={loading}>
+            <Button
+              type="submit"
+              disabled={loading}
+              className="mt-2 bg-blue-600 hover:bg-blue-500 transition"
+            >
               {loading ? "Sending..." : "Send Message"}
             </Button>
+
+            {status === "success" && (
+              <p className="text-sm text-green-400">
+                Message sent successfully. We’ll get back to you soon.
+              </p>
+            )}
+
+            {status === "error" && (
+              <p className="text-sm text-red-400">
+                Failed to send message. Please try again.
+              </p>
+            )}
           </form>
         </div>
       </div>

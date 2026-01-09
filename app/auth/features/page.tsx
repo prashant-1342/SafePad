@@ -1,66 +1,69 @@
 export default function FeaturesPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-white">
 
-      <section className="py-14 bg-black text-white text-center">
-        <h1 className="text-3xl font-bold">Why SafePad?</h1>
-        <p className="mt-4 max-w-xl mx-auto text-gray-300">
-          SafePad is a security-focused password manager designed to give users
-          full control over their credentials using modern encryption practices.
+      <section className="relative overflow-hidden py-24 text-center">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.25),transparent_60%)]" />
+        <h1 className="relative text-4xl md:text-5xl font-bold tracking-tight">
+          Why <span className="text-blue-500">SafePad</span>?
+        </h1>
+        <p className="relative mt-6 max-w-2xl mx-auto text-gray-300 text-lg">
+          A security-first password manager built to demonstrate modern encryption,
+          zero-knowledge design, and full user control.
         </p>
       </section>
 
-      <section className="max-w-5xl mx-auto py-14 px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <section className="max-w-6xl mx-auto px-6 pb-24">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
 
           <FeatureCard
             title="End-to-End Encryption"
-            description="All passwords are encrypted before storage, ensuring that sensitive data is never exposed."
+            description="All secrets are encrypted on the client before storage, ensuring no plaintext exposure."
             icon="🔒"
           />
 
           <FeatureCard
             title="Master Password Protection"
-            description="Your vault is protected using a master password known only to you and never stored in plain form."
+            description="Your vault is secured by a master password that is never stored or transmitted."
             icon="🔑"
           />
 
           <FeatureCard
-            title="Zero-Knowledge Design"
-            description="SafePad follows a zero-knowledge approach where even the backend cannot read user secrets."
+            title="Zero-Knowledge Architecture"
+            description="SafePad cannot see or decrypt your data — privacy by design."
             icon="🙈"
           />
 
           <FeatureCard
             title="OTP-Based Authentication"
-            description="Email-based OTP verification ensures only authorized users can access their account."
+            description="Email OTP verification adds an additional layer of account security."
             icon="🛡️"
           />
 
           <FeatureCard
             title="Platform Independent"
-            description="SafePad is not tied to any single browser or ecosystem, giving users full flexibility."
+            description="Works across devices and environments without locking you into a single ecosystem."
             icon="🌐"
           />
 
           <FeatureCard
-            title="Modern Full-Stack Architecture"
-            description="Built using Next.js API routes, secure hashing, and scalable backend design."
+            title="Modern Full-Stack Build"
+            description="Powered by Next.js APIs, secure hashing, and scalable backend patterns."
             icon="⚙️"
           />
 
         </div>
       </section>
 
-      
-      <section className="py-12 bg-white text-center">
-        <h2 className="text-2xl font-semibold">Security built with intent</h2>
-        <p className="mt-3 text-gray-600 max-w-lg mx-auto">
-          SafePad is designed to demonstrate how a modern password manager can be
-          implemented with transparency, security, and control.
+      <section className="border-t border-white/10 py-16 text-center bg-black/40 backdrop-blur">
+        <h2 className="text-2xl md:text-3xl font-semibold">
+          Security built with intent
+        </h2>
+        <p className="mt-4 max-w-xl mx-auto text-gray-400">
+          SafePad focuses on correctness, transparency, and strong cryptographic
+          foundations — not shortcuts.
         </p>
       </section>
-
     </div>
   );
 }
@@ -75,10 +78,19 @@ function FeatureCard({
   icon: string;
 }) {
   return (
-    <div className="bg-white border rounded-lg p-5">
-      <div className="text-3xl mb-3">{icon}</div>
-      <h3 className="text-lg font-semibold">{title}</h3>
-      <p className="mt-2 text-sm text-gray-600">{description}</p>
+    <div className="group relative rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur transition-all duration-300 hover:-translate-y-2 hover:border-blue-500/40 hover:shadow-[0_0_40px_-10px_rgba(59,130,246,0.6)]">
+
+      <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 text-2xl">
+        {icon}
+      </div>
+
+      <h3 className="text-lg font-semibold mb-2">
+        {title}
+      </h3>
+
+      <p className="text-sm text-gray-400 leading-relaxed">
+        {description}
+      </p>
     </div>
   );
 }
