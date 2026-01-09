@@ -9,7 +9,7 @@ export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
-  const [masterPassword, setMasterPassword] = useState("");
+  const [masterpassword, setMasterPassword] = useState("");
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [loading, setLoading] = useState(false);
 
@@ -23,16 +23,18 @@ export default function Login() {
         body: JSON.stringify({ email }),
       });
 
-      if (res.status === 404) {
-        alert("User does not exist");
+      const data = await res.json();
+
+      if (res.status === 200) {
+        
+        setStep(2);
+      } else if (res.status === 201) {
+       
+        alert("This email is not registered. Please sign up first.");
         setLoading(false);
         return;
-      }
-
-      if (res.ok) {
-        setStep(2);
       } else {
-        alert("Failed to send OTP");
+        alert(data.error || "Failed to send OTP");
       }
     } catch (error) {
       console.error(error);
@@ -70,12 +72,12 @@ export default function Login() {
       const res = await fetch("/api/auth/verify-masterpassword", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, masterpassword: masterPassword }),
+        body: JSON.stringify({ email, masterpassword: masterpassword }),
       });
 
       if (res.ok) {
         localStorage.setItem("userEmail", email);
-        sessionStorage.setItem("masterPassword", masterPassword);
+        sessionStorage.setItem("masterPassword", masterpassword);
         router.push("/dashboard");
       } else {
         alert("Wrong Master Password");
@@ -222,7 +224,7 @@ export default function Login() {
                     type="password"
                     placeholder="Min. 8 characters"
                     className="w-full h-12 px-4 rounded-lg bg-login-input border border-gray-600 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    value={masterPassword}
+                    value={masterpassword}
                     onChange={(e) => setMasterPassword(e.target.value)}
                     required
                   />
