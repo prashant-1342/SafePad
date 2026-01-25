@@ -69,24 +69,29 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
     try {
+      const { deriveAuthHash, deriveEncryptionKey } = await import("@/app/lib/security");
+      const authHash = await deriveAuthHash(masterpassword, email);
+      const encryptionKey = await deriveEncryptionKey(masterpassword, email);
+
       const res = await fetch("/api/auth/verify-masterpassword", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, masterpassword: masterpassword }),
+        body: JSON.stringify({ email, masterpassword: authHash }),
       });
 
       if (res.ok) {
         localStorage.setItem("userEmail", email);
-        sessionStorage.setItem("masterPassword", masterpassword);
+        sessionStorage.setItem("masterPassword", encryptionKey);
         router.push("/dashboard");
       } else {
         alert("Wrong Master Password");
       }
     } catch (error) {
-      console.error(error);
-      alert("Something went wrong");
+      console.error("Login error:", error);
+      alert("Verification failed. Please check your credentials.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (

@@ -54,19 +54,30 @@ export default function Signup() {
 
     setLoading(true);
 
-    const signup = await fetch("/api/auth/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name,
-        email,
-        masterpassword,
-      }),
-    });
+    try {
+      const { deriveAuthHash } = await import("@/app/lib/security");
+      const authHash = await deriveAuthHash(masterpassword, email);
 
-    if (signup.status === 201) {
-      localStorage.setItem("userEmail", email);
-      router.push("/dashboard");
+      const signup = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          masterpassword: authHash,
+        }),
+      });
+
+      if (signup.status === 201) {
+        localStorage.setItem("userEmail", email);
+        router.push("/dashboard");
+      } else {
+        const data = await signup.json();
+        alert(data.message || "Signup failed");
+      }
+    } catch (error) {
+      console.error("Signup error:", error);
+      alert("Encryption error or network failure. Please try again.");
     }
 
     setLoading(false);

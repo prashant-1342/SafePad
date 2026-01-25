@@ -1,7 +1,7 @@
 import CryptoJS from 'crypto-js';
 
 export const encrypt = (text: string, secret: string): string => {
-  if (!text) return "";
+  if (!text || !secret) return text || "";
   try {
     return CryptoJS.AES.encrypt(text, secret).toString();
   } catch (error) {
@@ -11,7 +11,7 @@ export const encrypt = (text: string, secret: string): string => {
 };
 
 export const decrypt = (ciphertext: string, secret: string): string => {
-  if (!ciphertext) return "";
+  if (!ciphertext || !secret) return ciphertext || "";
   try {
     const bytes = CryptoJS.AES.decrypt(ciphertext, secret);
     const originalText = bytes.toString(CryptoJS.enc.Utf8);
