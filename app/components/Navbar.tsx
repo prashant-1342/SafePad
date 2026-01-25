@@ -8,7 +8,7 @@ export default function Navbar() {
     <nav className="sticky top-0  z-50 w-[94%] max-w-7xl mx-auto rounded-2xl border border-white/10 bg-black/60 px-6 py-4 backdrop-blur shadow-xl">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-8">
-          <Link href="/" className="text-2xl font-semibold tracking-wide">
+          <Link href="/" className="text-2xl font-semibold hover:text-cyan-400 tracking-wide">
             SafePad
           </Link>
 
@@ -44,14 +44,15 @@ export default function Navbar() {
           <Link href="/auth/signup">
             <Button
               variant="outline"
-              className="h-9 rounded-lg border-white/20 bg-white/5 px-4 text-sm font-semibold text-white transition hover:border-white/40 hover:bg-white/10"
+            className="h-9 rounded-lg border cursor-pointer border-white/20 bg-white/5 px-4 text-sm font-semibold text-white transition-colors duration-200 hover:bg-white/20 hover:text-cyan-400 hover:border-white  hover:pointer/80"
+
             >
               Sign up
             </Button>
           </Link>
 
           <Link href="/auth/login">
-            <Button className="h-9 rounded-lg bg-cyan-400 px-4 text-sm font-semibold text-black transition hover:bg-cyan-300">
+            <Button className="h-9 cursor-pointer rounded-lg bg-cyan-400 px-4 text-sm font-semibold text-black transition hover:bg-cyan-300 hover:border-2px-black">
               Log in
             </Button>
           </Link>

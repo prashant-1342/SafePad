@@ -1,13 +1,10 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-
-const stats = [
-  { label: "Vault items stored", value: "N/A" },
-  { label: "Encryption strength", value: "AES-256" },
-  { label: "Zero-knowledge access", value: "100%" },
-];
+import Footer from "./components/Footer"; 
 
 const pillars = [
   {
@@ -28,6 +25,30 @@ const pillars = [
 ];
 
 export default function Home() {
+  const [vaultCount, setVaultCount] = useState<number | string>("...");
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await fetch("/api/stats");
+        if (res.ok) {
+          const data = await res.json();
+          setVaultCount(data.vaultCount);
+        }
+      } catch (error) {
+        console.error("Failed to fetch statistics", error);
+        setVaultCount("N/A");
+      }
+    };
+    fetchStats();
+  }, []);
+
+  const stats = [
+    { label: "Vault items stored", value: vaultCount },
+    { label: "Encryption strength", value: "AES-256" },
+    { label: "Zero-knowledge access", value: "100%" },
+  ];
+
   return (
     <div className="min-h-screen bg-[#04070f] text-white pt-6 overflow-x-hidden">
       <Navbar />
@@ -49,16 +70,16 @@ export default function Home() {
 
               <div className="flex flex-wrap items-center gap-4">
                 <Link href="/auth/signup">
-                  <Button className="h-12 rounded-xl bg-cyan-400 px-6 text-base font-semibold text-[#04070f] transition hover:-translate-y-0.5 hover:bg-cyan-300">
+                  <Button className="h-12 cursor-pointer rounded-xl bg-cyan-400 px-6 text-base font-semibold text-[#04070f] transition hover:-translate-y-0.5 hover:bg-cyan-300">
                     Get started for free
                   </Button>
                 </Link>
                 <Link href="/auth/login">
                   <Button
                     variant="outline"
-                    className="h-12 rounded-xl border-white/20 bg-white/5 px-6 text-base font-semibold text-white transition hover:border-white/40 hover:bg-white/10"
+                    className="h-12 text-white cursor-pointer rounded-xl border-white/20 bg-white/5 px-6 text-base font-semibold text-white transition hover:-translate-y-0.5  hover:border-white/40 hover:text-cyan-400 hover:bg-white/10"
                   >
-                    Sign in
+                    Sign up
                   </Button>
                 </Link>
               </div>
