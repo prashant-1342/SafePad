@@ -1,9 +1,10 @@
+import Navbar from "@/app/components/Navbar"
 export default function FeaturesPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-white">
-
-      <section className="relative overflow-hidden py-24 text-center">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.25),transparent_60%)]" />
+        <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-white pt-6">
+      <Navbar/> 
+      <section className="relative overflow-hidden py-6  text-center">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,transparent_60%)]" />
         <h1 className="relative text-4xl md:text-5xl font-bold tracking-tight">
           Why <span className="text-blue-500">SafePad</span>?
         </h1>
@@ -78,6 +79,7 @@ function FeatureCard({
   icon: string;
 }) {
   return (
+ 
     <div className="group relative rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur transition-all duration-300 hover:-translate-y-2 hover:border-blue-500/40 hover:shadow-[0_0_40px_-10px_rgba(59,130,246,0.6)]">
 
       <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 text-2xl">
@@ -92,5 +94,6 @@ function FeatureCard({
         {description}
       </p>
     </div>
+  
   );
 }

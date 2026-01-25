@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <nav className="fixed top-6 left-1/2 z-50 w-[94%] max-w-7xl -translate-x-1/2 rounded-2xl border border-white/10 bg-black/60 px-6 py-4 backdrop-blur shadow-xl">
+    <nav className="sticky top-0  z-50 w-[94%] max-w-7xl mx-auto rounded-2xl border border-white/10 bg-black/60 px-6 py-4 backdrop-blur shadow-xl">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-8">
           <Link href="/" className="text-2xl font-semibold tracking-wide">

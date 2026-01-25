@@ -10,7 +10,7 @@ export async function deriveKey(password: string, salt: string): Promise<string>
       memorySize: 65536, 
       hashLength: 32,
       outputType: 'encoded',
-    });
+    }); 
     return result;
   } catch (error) {
     console.error('Key derivation failed:', error);

@@ -1,5 +1,5 @@
 "use client";
-
+import Navbar from "@/app/components/Navbar"
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
@@ -36,12 +36,15 @@ export default function ContactPage() {
 
     setLoading(false);
   };
-
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black flex items-center justify-center px-6">
-      <div className="w-full max-w-5xl rounded-2xl border border-white/10 bg-white/5 backdrop-blur overflow-hidden grid grid-cols-1 md:grid-cols-2 shadow-xl">
+     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-white pt-6">
+      <Navbar/>
+      <div className="flex-1 flex items-center justify-center py-12">
+        <div className="w-full max-w-5xl rounded-2xl border border-white/10 bg-white/5 backdrop-blur overflow-hidden grid grid-cols-1 md:grid-cols-2 shadow-xl">
 
-        {/* Left */}
+
+
+     
         <div className="relative p-10 text-white flex flex-col justify-center bg-gradient-to-br from-blue-600/20 to-cyan-400/10">
           <h1 className="text-4xl font-bold tracking-tight">
             Contact <span className="text-blue-400">SafePad</span>
@@ -57,7 +60,7 @@ export default function ContactPage() {
           </div>
         </div>
 
-        {/* Right */}
+      
         <div className="p-10">
           <h2 className="text-2xl font-semibold text-white">
             Send a message
@@ -112,6 +115,7 @@ export default function ContactPage() {
           </form>
         </div>
       </div>
+    </div>
     </div>
   );
 }
