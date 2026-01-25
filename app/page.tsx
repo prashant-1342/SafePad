@@ -35,7 +35,7 @@ export default function Home() {
         <div className="pointer-events-none absolute -left-20 top-10 h-96 w-96 rotate-12 bg-gradient-to-br from-blue-500 via-cyan-400 to-purple-500 opacity-30 blur-3xl" />
         <div className="pointer-events-none absolute right-0 top-72 h-80 w-80 -rotate-12 bg-gradient-to-br from-pink-400 via-orange-300 to-yellow-200 opacity-25 blur-3xl" />
 
-        <section className="relative px-6 pb-28 pt-40 lg:px-16 xl:px-24">
+        <section className="relative px-6 pb-28 pt-15 lg:px-16 xl:px-24">
           <div className="mx-auto max-w-6xl grid gap-16 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
             <div className="space-y-8">
               <h1 className="text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">

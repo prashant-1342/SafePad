@@ -6,7 +6,7 @@ export default function Security() {
      <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-white pt-6">
       <Navbar/>
     
-      <div className="mx-auto py-20 max-w-4xl space-y-20">
+      <div className="mx-auto py-20 px-6 max-w-4xl space-y-20">
 
         <section className="space-y-6">
           <h1 className="text-4xl font-semibold tracking-tight">

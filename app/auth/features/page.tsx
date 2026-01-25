@@ -3,7 +3,7 @@ export default function FeaturesPage() {
   return (
         <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-white pt-6">
       <Navbar/> 
-      <section className="relative overflow-hidden py-6  text-center">
+      <section className="relative overflow-hidden py-6 px-6 text-center">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,transparent_60%)]" />
         <h1 className="relative text-4xl md:text-5xl font-bold tracking-tight">
           Why <span className="text-blue-500">SafePad</span>?

@@ -39,7 +39,7 @@ export default function ContactPage() {
   return (
      <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-white pt-6">
       <Navbar/>
-      <div className="flex-1 flex items-center justify-center py-12">
+      <div className="flex-1 flex items-center justify-center py-12 px-6">
         <div className="w-full max-w-5xl rounded-2xl border border-white/10 bg-white/5 backdrop-blur overflow-hidden grid grid-cols-1 md:grid-cols-2 shadow-xl">
 
 
