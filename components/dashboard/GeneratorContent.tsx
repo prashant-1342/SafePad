@@ -1,5 +1,5 @@
 import { Check, RefreshCw, Copy } from "lucide-react";
-import { GenTab, ViewMode } from "../../app/dashboard/types";
+import { GenTab } from "../../app/dashboard/types";
 import { getPasswordStyle } from "./utils";
 
 interface GeneratorContentProps {
@@ -55,33 +55,25 @@ export const GeneratorContent = ({
 }: GeneratorContentProps) => {
   return (
     <div
-      className={`w-full ${
-        isModal
-          ? "flex flex-col gap-10"
-          : "h-full flex flex-col lg:flex-row gap-12"
+      className={`w-full flex flex-col ${
+        isModal ? "gap-8" : "gap-8 lg:flex-row lg:gap-12"
       }`}
     >
-      <div
-        className={`${
-          isModal
-            ? "w-full"
-            : "w-full lg:w-[40%] flex flex-col gap-8"
-        }`}
-      >
+      <div className={`${isModal ? "w-full" : "w-full lg:w-[40%]"} space-y-8`}>
         <div
-          className={`${
+          className={`flex ${
             isModal
-              ? "flex border-b border-zinc-800"
-              : "bg-zinc-900/40 flex p-1 rounded-2xl border border-zinc-800"
+              ? "border-b border-zinc-800"
+              : "bg-zinc-900/40 p-1 rounded-2xl border border-zinc-800"
           }`}
         >
           {(["password", "passphrase", "username"] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setGenTab(tab)}
-              className={`flex-1 py-2.5 text-sm font-medium rounded-xl capitalize transition-all ${
+              className={`flex-1 py-2.5 text-sm font-medium rounded-xl capitalize transition ${
                 genTab === tab
-                  ? "bg-zinc-800 text-emerald-400 shadow"
+                  ? "bg-zinc-800 text-emerald-400"
                   : "text-zinc-500 hover:text-zinc-300"
               }`}
             >
@@ -92,13 +84,11 @@ export const GeneratorContent = ({
 
         <div
           className={`space-y-8 ${
-            isModal
-              ? ""
-              : "bg-zinc-900/30 p-8 rounded-3xl border border-zinc-800"
+            isModal ? "" : "bg-zinc-900/30 p-6 lg:p-8 rounded-3xl border border-zinc-800"
           }`}
         >
           {genTab === "password" && (
-            <div className="space-y-8">
+            <>
               <div>
                 <div className="flex justify-between text-xs text-zinc-400 mb-2">
                   <span>Length</span>
@@ -109,38 +99,35 @@ export const GeneratorContent = ({
                   min={8}
                   max={64}
                   value={genLength}
-                  onChange={(e) => setGenLength(parseInt(e.target.value))}
+                  onChange={(e) => setGenLength(Number(e.target.value))}
                   className="w-full accent-emerald-500"
                 />
               </div>
 
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-3 gap-3">
                 {[
-                  { label: "ABC", value: genUseUpper, set: setGenUseUpper, text: "Uppercase" },
-                  { label: "123", value: genUseNumbers, set: setGenUseNumbers, text: "Numbers" },
-                  { label: "#$%", value: genUseSymbols, set: setGenUseSymbols, text: "Symbols" },
+                  { label: "ABC", value: genUseUpper, set: setGenUseUpper },
+                  { label: "123", value: genUseNumbers, set: setGenUseNumbers },
+                  { label: "#$%", value: genUseSymbols, set: setGenUseSymbols }
                 ].map((opt) => (
                   <button
-                    key={opt.text}
+                    key={opt.label}
                     onClick={() => opt.set(!opt.value)}
-                    className={`rounded-2xl p-4 border transition-all ${
+                    className={`rounded-xl p-4 border transition ${
                       opt.value
                         ? "bg-emerald-500/10 border-emerald-500/40 text-emerald-400"
                         : "bg-zinc-950 border-zinc-800 text-zinc-500 hover:bg-zinc-900"
                     }`}
                   >
                     <div className="text-lg font-bold">{opt.label}</div>
-                    <div className="text-[10px] uppercase tracking-wider opacity-70">
-                      {opt.text}
-                    </div>
                   </button>
                 ))}
               </div>
-            </div>
+            </>
           )}
 
           {genTab === "passphrase" && (
-            <div className="space-y-8">
+            <>
               <div>
                 <div className="flex justify-between text-xs text-zinc-400 mb-2">
                   <span>Words</span>
@@ -151,7 +138,7 @@ export const GeneratorContent = ({
                   min={3}
                   max={8}
                   value={ppWordCount}
-                  onChange={(e) => setPpWordCount(parseInt(e.target.value))}
+                  onChange={(e) => setPpWordCount(Number(e.target.value))}
                   className="w-full accent-emerald-500"
                 />
               </div>
@@ -174,7 +161,7 @@ export const GeneratorContent = ({
 
               <button
                 onClick={() => setPpCapitalize(!ppCapitalize)}
-                className={`flex items-center justify-between p-4 rounded-2xl border transition ${
+                className={`flex items-center justify-between p-4 rounded-xl border transition ${
                   ppCapitalize
                     ? "bg-emerald-500/10 border-emerald-500/40 text-emerald-400"
                     : "bg-zinc-950 border-zinc-800 text-zinc-500"
@@ -183,13 +170,13 @@ export const GeneratorContent = ({
                 Capitalize words
                 {ppCapitalize && <Check className="w-4 h-4" />}
               </button>
-            </div>
+            </>
           )}
 
           {genTab === "username" && (
             <button
               onClick={() => setUnIncludeNumber(!unIncludeNumber)}
-              className={`flex items-center justify-between p-5 rounded-2xl border transition ${
+              className={`flex items-center justify-between p-4 rounded-xl border transition ${
                 unIncludeNumber
                   ? "bg-emerald-500/10 border-emerald-500/40 text-emerald-400"
                   : "bg-zinc-950 border-zinc-800 text-zinc-500"
@@ -203,7 +190,25 @@ export const GeneratorContent = ({
       </div>
 
       <div className={`${isModal ? "w-full" : "w-full lg:w-[60%]"} flex flex-col`}>
-        <div className="flex-1 bg-zinc-950 rounded-3xl border border-zinc-800 flex flex-col items-center justify-center p-10 text-center">
+        <div
+          className="
+            bg-zinc-950
+            rounded-3xl
+            border
+            border-zinc-800
+            flex
+            flex-col
+            items-center
+            justify-center
+            text-center
+            p-6
+            lg:p-10
+            h-[180px]
+            w-full
+            flex-shrink-0
+            overflow-hidden
+          "
+        >
           <div
             className={`
               ${getPasswordStyle(generatedResult.length)}
@@ -214,29 +219,32 @@ export const GeneratorContent = ({
               from-white
               to-zinc-400
               bg-clip-text
-              text-center
               w-full
-              overflow-hidden
-              break-all
+              max-w-full
               leading-tight
               transition-all
               duration-200
+              select-all
             `}
+            style={{ wordBreak: "normal", whiteSpace: "normal" }}
           >
             {generatedResult}
           </div>
 
-          <div className="flex gap-4 mt-10">
+          <div className="flex gap-4 mt-8">
             <button
               onClick={runGenerator}
-              className="px-4 py-2 rounded-xl text-sm text-zinc-400 hover:text-white hover:bg-zinc-800 transition"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm text-zinc-400 hover:text-white hover:bg-zinc-800 transition"
             >
+              <RefreshCw className="w-4 h-4" />
               Regenerate
             </button>
+
             <button
               onClick={() => copyToClipboard(generatedResult)}
-              className="px-4 py-2 rounded-xl text-sm text-zinc-400 hover:text-white hover:bg-zinc-800 transition"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm text-zinc-400 hover:text-white hover:bg-zinc-800 transition"
             >
+              <Copy className="w-4 h-4" />
               Copy
             </button>
           </div>

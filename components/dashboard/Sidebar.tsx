@@ -6,11 +6,26 @@ interface SidebarProps {
   userEmail: string;
   onViewChange: (view: "vault" | "generator", filterName?: string) => void;
   onLogout: () => void;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
-export const Sidebar = ({ activeView, filter, userEmail, onViewChange, onLogout }: SidebarProps) => {
+export const Sidebar = ({ activeView, filter, userEmail, onViewChange, onLogout, isOpen, onClose }: SidebarProps) => {
   return (
-    <aside className="w-72 bg-zinc-950 border-r border-zinc-900 p-6 flex flex-col relative overflow-hidden">
+    <>
+      {/* Mobile Backdrop */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300"
+          onClick={onClose}
+        />
+      )}
+
+      <aside className={`
+        fixed inset-y-0 left-0 w-72 bg-zinc-950 border-r border-zinc-900 p-6 flex flex-col z-50 transition-transform duration-300 ease-in-out
+        lg:translate-x-0 lg:static lg:block
+        ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+      `}>
       <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-emerald-900/10 to-transparent pointer-events-none" />
       
       <div className="flex items-center gap-3 mb-10 z-10 transition-all hover:scale-105 cursor-pointer" onClick={() => onViewChange("vault", "All items")}>
@@ -95,5 +110,6 @@ export const Sidebar = ({ activeView, filter, userEmail, onViewChange, onLogout 
         </button>
       </div>
     </aside>
+    </>
   );
 };

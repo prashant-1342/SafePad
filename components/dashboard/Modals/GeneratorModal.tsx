@@ -33,10 +33,10 @@ export const GeneratorModal = (props: GeneratorModalProps) => {
   if (!props.isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-zinc-950/80 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-zinc-950/80 backdrop-blur-sm animate-in fade-in duration-200 p-4">
       <div className="w-full max-w-3xl rounded-2xl border border-zinc-800 bg-zinc-900 shadow-2xl animate-in zoom-in-95 duration-200">
         
-        <div className="flex items-center justify-between px-8 py-5 border-b border-zinc-800">
+        <div className="flex items-center justify-between px-6 lg:px-8 py-4 lg:py-5 border-b border-zinc-800">
           <h3 className="flex items-center gap-2 text-lg font-semibold text-white">
             <Wand2 className="h-5 w-5 text-emerald-400" />
             Password Generator
@@ -49,7 +49,7 @@ export const GeneratorModal = (props: GeneratorModalProps) => {
           </button>
         </div>
 
-        <div className="px-10 py-10">
+        <div className="px-6 lg:px-10 py-6 lg:py-10">
           <GeneratorContent {...props} isModal={true} />
         </div>
       </div>

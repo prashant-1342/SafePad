@@ -255,14 +255,21 @@ export default function Dashboard() {
     unIncludeNumber, setUnIncludeNumber, generatedResult, runGenerator, copyToClipboard
   };
 
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   return (
-    <div className="flex h-screen bg-black text-zinc-100 selection:bg-emerald-500/30">
+    <div className="flex h-screen bg-black text-zinc-100 selection:bg-emerald-500/30 overflow-hidden">
       <Sidebar 
         activeView={activeView}
         filter={filter}
         userEmail={userEmail}
-        onViewChange={handleViewChange}
+        onViewChange={(view, filterName) => {
+          handleViewChange(view, filterName);
+          setIsMobileMenuOpen(false);
+        }}
         onLogout={handleLogout}
+        isOpen={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
       />
 
       <main className="flex-1 overflow-hidden flex flex-col relative bg-black">
@@ -276,6 +283,7 @@ export default function Dashboard() {
                     viewMode={viewMode}
                     onViewModeChange={setViewMode}
                     onAddItemClick={() => setIsModalOpen(true)}
+                    onMenuClick={() => setIsMobileMenuOpen(true)}
                 />
                 <VaultContent 
                     items={filteredItems}

@@ -24,8 +24,8 @@ export const AddItemModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm flex items-center justify-center z-50 animate-in fade-in duration-200">
-      <div className="bg-zinc-900 w-[28rem] rounded-2xl border border-zinc-800 shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm flex items-center justify-center z-50 animate-in fade-in duration-200 p-4">
+      <div className="bg-zinc-900 w-full max-w-md rounded-2xl border border-zinc-800 shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
         <div className="bg-zinc-900 border-b border-zinc-800 p-6 flex justify-between items-center shrink-0">
             <div>
                 <h3 className="text-lg font-semibold text-white">Add New Item</h3>

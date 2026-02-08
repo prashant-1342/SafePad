@@ -35,9 +35,9 @@ export const VaultContent = ({ items, viewMode, loading, search, onItemClick }: 
   }
 
   return (
-    <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
+    <div className="flex-1 overflow-y-auto p-4 lg:p-8 custom-scrollbar">
       {viewMode === "grid" ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
           {items.map((item, idx) => (
             <div 
               key={idx}
@@ -78,8 +78,8 @@ export const VaultContent = ({ items, viewMode, loading, search, onItemClick }: 
           ))}
         </div>
       ) : (
-        <div className="bg-zinc-900/30 border border-zinc-800 rounded-2xl overflow-hidden">
-          <table className="w-full text-sm">
+        <div className="bg-zinc-900/30 border border-zinc-800 rounded-2xl overflow-x-auto custom-scrollbar">
+          <table className="w-full text-sm min-w-[600px] lg:min-w-0">
             <thead className="bg-zinc-900/50 border-b border-zinc-800">
               <tr>
                 <th className="text-left py-4 px-6 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Name</th>
