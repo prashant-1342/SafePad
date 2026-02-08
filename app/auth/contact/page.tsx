@@ -37,7 +37,7 @@ export default function ContactPage() {
     setLoading(false);
   };
   return (
-     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-white pt-6">
+<div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-white pt-6"> 
       <Navbar/>
       <div className="flex-1 flex items-center justify-center py-12 px-6">
         <div className="w-full max-w-5xl rounded-2xl border border-white/10 bg-white/5 backdrop-blur overflow-hidden grid grid-cols-1 md:grid-cols-2 shadow-xl">
@@ -55,8 +55,8 @@ export default function ContactPage() {
           </p>
 
           <div className="mt-8 space-y-2 text-sm text-gray-400">
-            <p>📧 support@safepad.dev</p>
-            <p>🔐 security@safepad.dev</p>
+            <p>📧 sparkps11@gmail.com</p>
+            {/* <p>🔐 security@safepad.dev</p> */}
           </div>
         </div>
 
