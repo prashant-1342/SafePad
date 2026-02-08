@@ -13,7 +13,7 @@ interface SidebarProps {
 export const Sidebar = ({ activeView, filter, userEmail, onViewChange, onLogout, isOpen, onClose }: SidebarProps) => {
   return (
     <>
-      {/* Mobile Backdrop */}
+     
       {isOpen && (
         <div 
           className="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300"
@@ -28,9 +28,9 @@ export const Sidebar = ({ activeView, filter, userEmail, onViewChange, onLogout,
       `}>
       <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-emerald-900/10 to-transparent pointer-events-none" />
       
-      <div className="flex items-center gap-3 mb-10 z-10 transition-all hover:scale-105 cursor-pointer" onClick={() => onViewChange("vault", "All items")}>
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-900/20">
-          <Shield className="w-6 h-6 text-white" />
+      <div className="flex items-center gap-3 mb-10 z-10 transition-all " onClick={() => onViewChange("vault", "All items")}>
+        <div className="w-10 h-10 rounded-xl  flex items-center justify-center ">
+         <img src="favicon.ico" alt="" />
         </div>
         <h1 className="text-2xl font-bold tracking-tight text-white">
           SafePad
@@ -93,7 +93,7 @@ export const Sidebar = ({ activeView, filter, userEmail, onViewChange, onLogout,
       
       <div className="pt-6 border-t border-zinc-900 z-10">
         <div className="flex items-center gap-3 px-2 mb-4">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-zinc-700 to-zinc-600 flex items-center justify-center text-xs font-bold text-white shadow-sm">
+          <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center font-bold text-white">
               {userEmail.charAt(0).toUpperCase()}
           </div>
            <div className="flex-1 min-w-0">
