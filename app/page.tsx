@@ -8,16 +8,19 @@ import Footer from "./components/Footer";
 
 const pillars = [
   {
+    icon :"/cyber-security.png",
     title: "Encryption-first design",
     body:
       "Every credential is encrypted before it ever reaches storage, keeping secrets readable only by you.",
   },
   {
+    icon :"/autofill.png",
     title: "Effortless autofill",
     body:
       "Log in instantly across devices without repeatedly typing or exposing passwords on screen.",
   },
   {
+    icon :"/trust.png",
     title: "Built for trust",
     body:
       "No tracking, no data mining, and no hidden access. Your vault stays yours at all times.",
@@ -135,7 +138,9 @@ export default function Home() {
                   key={item.title}
                   className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur transition hover:-translate-y-1 hover:border-white/20"
                 >
-                  <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-500" />
+                  <div className="h-10 w-10 flex justify-center items-center rounded-lg bg-gradient-to-br from-cyan-400 to-blue-500" >
+                    <img src={item.icon} alt={item.title} width={24} height={24} />
+                  </div>
                   <h3 className="text-lg font-semibold">{item.title}</h3>
                   <p className="text-sm text-white/70">{item.body}</p>
                 </div>
