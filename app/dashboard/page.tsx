@@ -41,6 +41,8 @@ export default function Dashboard() {
   
   const [isEditing, setIsEditing] = useState(false);
   const [editFormData, setEditFormData] = useState<Item | null>(null);
+
+ 
   
   const [newItem, setNewItem] = useState<Item>({
     id: 0, 
@@ -79,6 +81,15 @@ export default function Dashboard() {
     fetchItems(email, mp);
     runGenerator(); 
   }, [router]);
+
+ const getPasswordStyle = (len: number) => {
+  if (len <= 16) return "text-4xl tracking-widest";
+  if (len <= 24) return "text-3xl tracking-wider";
+  if (len <= 32) return "text-2xl tracking-wide";
+  if (len <= 48) return "text-xl tracking-normal";
+  return "text-lg tracking-tight";
+};
+
 
  
   useEffect(() => {
@@ -283,162 +294,207 @@ export default function Dashboard() {
   };
 
   const GeneratorContent = ({ isModal = false }: { isModal?: boolean }) => (
-      <div className={`w-full ${isModal ? "space-y-6" : "h-full flex flex-col md:flex-row gap-8"}`}>
- 
-         <div className={`${isModal ? "w-full" : "w-full md:w-1/2 lg:w-2/5 flex flex-col gap-6"}`}>
-            {!isModal && (
-                 <div className="bg-zinc-900/50 p-1 rounded-xl border border-zinc-800 flex shrink-0">
-                    {(["password", "passphrase", "username"] as const).map((tab) => (
-                        <button
-                            key={tab}
-                            onClick={() => setGenTab(tab)}
-                            className={`flex-1 py-2.5 text-sm font-medium rounded-lg transition-all capitalize ${
-                                genTab === tab ? "bg-zinc-800 text-emerald-400 shadow-sm" : "text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50"
-                            }`}
-                        >
-                            {tab}
-                        </button>
-                    ))}
-                </div>
-            )}
-
-             {isModal && (
-                <div className="flex border-b border-zinc-800 mb-6">
-                    {(["password", "passphrase", "username"] as const).map((tab) => (
-                        <button
-                            key={tab}
-                            onClick={() => setGenTab(tab)}
-                            className={`flex-1 py-3 text-sm font-medium transition-colors capitalize ${
-                                genTab === tab ? "bg-zinc-900 text-emerald-400 border-b-2 border-emerald-500" : "bg-zinc-950 text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/50"
-                            }`}
-                        >
-                            {tab}
-                        </button>
-                    ))}
-                </div>
-            )}
-
-            <div className={`space-y-6 ${!isModal ? "bg-zinc-900/30 p-6 rounded-2xl border border-zinc-800/50 flex-1" : ""}`}>
-                 {genTab === "password" && (
-                         <div className="space-y-6">
-                             <div>
-                                <div className="flex justify-between text-sm text-zinc-400 mb-2">
-                                    <span>Length</span>
-                                    <span className="font-mono text-emerald-500">{genLength}</span>
-                                </div>
-                                <input 
-                                    type="range" min="8" max="64" 
-                                    value={genLength} 
-                                    onChange={(e) => setGenLength(parseInt(e.target.value))}
-                                    className="w-full h-2 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
-                                />
-                            </div>
-                            <div className="grid grid-cols-3 gap-3">
-                                <label className={`flex flex-col items-center justify-center p-4 rounded-xl cursor-pointer border transition-all ${genUseUpper ? "bg-emerald-500/10 border-emerald-500/50 text-emerald-400" : "bg-zinc-950 border-zinc-800 text-zinc-500 hover:bg-zinc-900"}`}>
-                                    <span className="text-sm font-bold mb-1">ABC</span>
-                                    <span className="text-[10px] uppercase tracking-wider opacity-70">Uppercase</span>
-                                    <input type="checkbox" checked={genUseUpper} onChange={(e) => setGenUseUpper(e.target.checked)} className="hidden" />
-                                </label>
-                                <label className={`flex flex-col items-center justify-center p-4 rounded-xl cursor-pointer border transition-all ${genUseNumbers ? "bg-emerald-500/10 border-emerald-500/50 text-emerald-400" : "bg-zinc-950 border-zinc-800 text-zinc-500 hover:bg-zinc-900"}`}>
-                                    <span className="text-sm font-bold mb-1">123</span>
-                                    <span className="text-[10px] uppercase tracking-wider opacity-70">Numbers</span>
-                                    <input type="checkbox" checked={genUseNumbers} onChange={(e) => setGenUseNumbers(e.target.checked)} className="hidden" />
-                                </label>
-                                <label className={`flex flex-col items-center justify-center p-4 rounded-xl cursor-pointer border transition-all ${genUseSymbols ? "bg-emerald-500/10 border-emerald-500/50 text-emerald-400" : "bg-zinc-950 border-zinc-800 text-zinc-500 hover:bg-zinc-900"}`}>
-                                    <span className="text-sm font-bold mb-1">#$&</span>
-                                    <span className="text-[10px] uppercase tracking-wider opacity-70">Symbols</span>
-                                    <input type="checkbox" checked={genUseSymbols} onChange={(e) => setGenUseSymbols(e.target.checked)} className="hidden" />
-                                </label>
-                            </div>
-                         </div>
-                    )}
-
-                    {genTab === "passphrase" && (
-                        <div className="space-y-6">
-                            <div>
-                                <div className="flex justify-between text-sm text-zinc-400 mb-2">
-                                    <span>Word Count</span>
-                                    <span className="font-mono text-emerald-500">{ppWordCount}</span>
-                                </div>
-                                <input 
-                                    type="range" min="3" max="8" 
-                                    value={ppWordCount} 
-                                    onChange={(e) => setPpWordCount(parseInt(e.target.value))}
-                                    className="w-full h-2 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
-                                />
-                            </div>
-                            <div className="grid grid-cols-1 gap-4">
-                                <div>
-                                    <label className="block text-xs font-medium text-zinc-400 mb-2 uppercase tracking-wider">Separator</label>
-                                    <div className="flex bg-zinc-950 rounded-xl p-1 border border-zinc-800">
-                                        {[ "-", "_", ".", " "].map(sep => (
-                                            <button key={sep} onClick={() => setPpSeparator(sep)} className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${ppSeparator === sep ? "bg-zinc-800 text-white shadow-sm" : "text-zinc-500 hover:text-zinc-300"}`}>
-                                                {sep === " " ? "Space" : sep}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                                <label className={`flex items-center justify-between p-4 rounded-xl cursor-pointer border transition-all ${ppCapitalize ? "bg-emerald-500/10 border-emerald-500/50 text-emerald-400" : "bg-zinc-950 border-zinc-800 text-zinc-500 hover:bg-zinc-900"}`}>
-                                    <span className="text-sm font-medium">Capitalize Words</span>
-                                    <input type="checkbox" checked={ppCapitalize} onChange={(e) => setPpCapitalize(e.target.checked)} className="hidden" />
-                                    <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${ppCapitalize ? "bg-emerald-500 border-emerald-500" : "border-zinc-600"}`}>
-                                        {ppCapitalize && <Check className="w-3 h-3 text-white" />}
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
-                    )}
-
-                    {genTab === "username" && (
-                         <div className="space-y-4">
-                            <label className={`flex items-center justify-between p-4 rounded-xl cursor-pointer border transition-all ${unIncludeNumber ? "bg-emerald-500/10 border-emerald-500/50 text-emerald-400" : "bg-zinc-950 border-zinc-800 text-zinc-500 hover:bg-zinc-900"}`}>
-                                <span className="text-sm font-medium">Include Number suffix</span>
-                                <input type="checkbox" checked={unIncludeNumber} onChange={(e) => setUnIncludeNumber(e.target.checked)} className="hidden" />
-                                <div className={`w-5 h-5 rounded flex items-center justify-center border ${unIncludeNumber ? "bg-emerald-500 border-emerald-500" : "border-zinc-600"}`}>
-                                    {unIncludeNumber && <Check className="w-3.5 h-3.5 text-white" />}
-                                </div>
-                            </label>
-                         </div>
-                    )}
-            </div>
-         </div>
-
-         {/* Result Section */}
-         <div className={`${isModal ? "w-full" : "w-full md:w-1/2 lg:w-3/5 flex flex-col justify-center"}`}>
-             <div className="bg-zinc-950 p-8 rounded-3xl border border-zinc-800 relative group flex flex-col items-center justify-center min-h-[200px] md:min-h-[300px] shadow-2xl">
-                <div className="text-3xl md:text-4xl lg:text-5xl font-mono text-center text-white break-all tracking-wider font-bold bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent animate-in zoom-in-50 duration-300 key={generatedResult}">
-                    {generatedResult}
-                </div>
-                
-                <div className="flex gap-4 mt-8">
-                     <button 
-                        onClick={runGenerator}
-                        className="flex items-center gap-2 px-4 py-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors border border-transparent hover:border-zinc-700"
-                    >
-                        <RefreshCw className="w-5 h-5" />
-                        <span className="text-sm font-medium">Regenerate</span>
-                    </button>
-                    <button 
-                        onClick={() => { copyToClipboard(generatedResult); alert("Copied!"); }}
-                        className="flex items-center gap-2 px-4 py-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors border border-transparent hover:border-zinc-700"
-                    >
-                        <Copy className="w-5 h-5" />
-                         <span className="text-sm font-medium">Copy</span>
-                    </button>
-                </div>
-            </div>
-
-              {isModal && (
-                <button
-                    onClick={useGeneratedResult}
-                    className="w-full mt-6 bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-3 rounded-xl text-sm font-medium shadow-lg shadow-emerald-900/20 transition-all flex items-center justify-center gap-2"
-                >
-                    <Check className="w-4 h-4"/> Use {genTab === "username" ? "Username" : "Password"}
-                </button>
-              )}
-         </div>
+  <div
+    className={`w-full ${
+      isModal
+        ? "flex flex-col gap-10"
+        : "h-full flex flex-col lg:flex-row gap-12"
+    }`}
+  >
+    <div
+      className={`${
+        isModal
+          ? "w-full"
+          : "w-full lg:w-[40%] flex flex-col gap-8"
+      }`}
+    >
+      <div
+        className={`${
+          isModal
+            ? "flex border-b border-zinc-800"
+            : "bg-zinc-900/40 flex p-1 rounded-2xl border border-zinc-800"
+        }`}
+      >
+        {(["password", "passphrase", "username"] as const).map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setGenTab(tab)}
+            className={`flex-1 py-2.5 text-sm font-medium rounded-xl capitalize transition-all ${
+              genTab === tab
+                ? "bg-zinc-800 text-emerald-400 shadow"
+                : "text-zinc-500 hover:text-zinc-300"
+            }`}
+          >
+            {tab}
+          </button>
+        ))}
       </div>
-  );
+
+      <div
+        className={`space-y-8 ${
+          isModal
+            ? ""
+            : "bg-zinc-900/30 p-8 rounded-3xl border border-zinc-800"
+        }`}
+      >
+        {genTab === "password" && (
+          <div className="space-y-8">
+            <div>
+              <div className="flex justify-between text-xs text-zinc-400 mb-2">
+                <span>Length</span>
+                <span className="font-mono text-emerald-400">{genLength}</span>
+              </div>
+              <input
+                type="range"
+                min={8}
+                max={64}
+                value={genLength}
+                onChange={(e) => setGenLength(parseInt(e.target.value))}
+                className="w-full accent-emerald-500"
+              />
+            </div>
+
+            <div className="grid grid-cols-3 gap-4">
+              {[
+                { label: "ABC", value: genUseUpper, set: setGenUseUpper, text: "Uppercase" },
+                { label: "123", value: genUseNumbers, set: setGenUseNumbers, text: "Numbers" },
+                { label: "#$%", value: genUseSymbols, set: setGenUseSymbols, text: "Symbols" },
+              ].map((opt) => (
+                <button
+                  key={opt.text}
+                  onClick={() => opt.set(!opt.value)}
+                  className={`rounded-2xl p-4 border transition-all ${
+                    opt.value
+                      ? "bg-emerald-500/10 border-emerald-500/40 text-emerald-400"
+                      : "bg-zinc-950 border-zinc-800 text-zinc-500 hover:bg-zinc-900"
+                  }`}
+                >
+                  <div className="text-lg font-bold">{opt.label}</div>
+                  <div className="text-[10px] uppercase tracking-wider opacity-70">
+                    {opt.text}
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {genTab === "passphrase" && (
+          <div className="space-y-8">
+            <div>
+              <div className="flex justify-between text-xs text-zinc-400 mb-2">
+                <span>Words</span>
+                <span className="font-mono text-emerald-400">{ppWordCount}</span>
+              </div>
+              <input
+                type="range"
+                min={3}
+                max={8}
+                value={ppWordCount}
+                onChange={(e) => setPpWordCount(parseInt(e.target.value))}
+                className="w-full accent-emerald-500"
+              />
+            </div>
+
+            <div className="flex gap-2">
+              {["-", "_", ".", " "].map((sep) => (
+                <button
+                  key={sep}
+                  onClick={() => setPpSeparator(sep)}
+                  className={`flex-1 py-2 rounded-xl text-sm font-medium transition ${
+                    ppSeparator === sep
+                      ? "bg-zinc-800 text-white"
+                      : "text-zinc-500 hover:bg-zinc-900"
+                  }`}
+                >
+                  {sep === " " ? "Space" : sep}
+                </button>
+              ))}
+            </div>
+
+            <button
+              onClick={() => setPpCapitalize(!ppCapitalize)}
+              className={`flex items-center justify-between p-4 rounded-2xl border transition ${
+                ppCapitalize
+                  ? "bg-emerald-500/10 border-emerald-500/40 text-emerald-400"
+                  : "bg-zinc-950 border-zinc-800 text-zinc-500"
+              }`}
+            >
+              Capitalize words
+              {ppCapitalize && <Check className="w-4 h-4" />}
+            </button>
+          </div>
+        )}
+
+        {genTab === "username" && (
+          <button
+            onClick={() => setUnIncludeNumber(!unIncludeNumber)}
+            className={`flex items-center justify-between p-5 rounded-2xl border transition ${
+              unIncludeNumber
+                ? "bg-emerald-500/10 border-emerald-500/40 text-emerald-400"
+                : "bg-zinc-950 border-zinc-800 text-zinc-500"
+            }`}
+          >
+            Include number suffix
+            {unIncludeNumber && <Check className="w-4 h-4" />}
+          </button>
+        )}
+      </div>
+    </div>
+
+    <div className={`${isModal ? "w-full" : "w-full lg:w-[60%]"} flex flex-col`}>
+      <div className="flex-1 bg-zinc-950 rounded-3xl border border-zinc-800 flex flex-col items-center justify-center p-10 text-center">
+      <div
+  className={`
+    ${getPasswordStyle(generatedResult.length)}
+    font-mono
+    font-bold
+    text-transparent
+    bg-gradient-to-r
+    from-white
+    to-zinc-400
+    bg-clip-text
+    text-center
+    w-full
+    overflow-hidden
+    break-all
+    leading-tight
+    transition-all
+    duration-200
+  `}
+>
+  {generatedResult}
+</div>
+
+
+
+        <div className="flex gap-4 mt-10">
+          <button
+            onClick={runGenerator}
+            className="px-4 py-2 rounded-xl text-sm text-zinc-400 hover:text-white hover:bg-zinc-800 transition"
+          >
+            Regenerate
+          </button>
+          <button
+            onClick={() => copyToClipboard(generatedResult)}
+            className="px-4 py-2 rounded-xl text-sm text-zinc-400 hover:text-white hover:bg-zinc-800 transition"
+          >
+            Copy
+          </button>
+        </div>
+      </div>
+
+      {isModal && (
+        <button
+          onClick={useGeneratedResult}
+          className="mt-6 bg-emerald-600 hover:bg-emerald-500 text-white py-3 rounded-xl text-sm font-medium transition"
+        >
+          Use {genTab === "username" ? "Username" : "Password"}
+        </button>
+      )}
+    </div>
+  </div>
+);
 
 
   return (
@@ -733,7 +789,7 @@ export default function Dashboard() {
                 <label className="block text-xs font-medium text-zinc-400 mb-1.5 ml-1">Name</label>
                 <input
                   type="text"
-                  required
+                
                   placeholder="e.g. My Visa Card or Google"
                   className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all"
                   value={newItem.name}
@@ -750,7 +806,7 @@ export default function Dashboard() {
                         <Key className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 group-focus-within/input:text-emerald-500 transition-colors" />
                         <input
                         type="password"
-                        placeholder="••••••••••••"
+                        placeholder=""
                         className="w-full bg-zinc-950 border border-zinc-800 rounded-xl pl-10 pr-10 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all"
                         value={newItem.password}
                         onChange={(e) => setNewItem({ ...newItem, password: e.target.value })}
@@ -798,25 +854,202 @@ export default function Dashboard() {
         </div>
       )}
       
-    
-      {isGeneratorOpen && (
-        <div className="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm flex items-center justify-center z-[70] animate-in fade-in duration-200">
-             <div className="bg-zinc-900 w-[500px] rounded-2xl border border-zinc-800 shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
-                <div className="bg-zinc-900 border-b border-zinc-800 p-4 flex justify-between items-center">
-                    <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-                        <Wand2 className="w-5 h-5 text-emerald-400"/> Generator
-                    </h3>
-                    <button onClick={() => setIsGeneratorOpen(false)} className="text-zinc-500 hover:text-white">
-                        <X className="w-5 h-5"/>
+    {isGeneratorOpen && (
+  <div className="fixed inset-0 z-[70] flex items-center justify-center bg-zinc-950/80 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="w-full max-w-3xl rounded-2xl border border-zinc-800 bg-zinc-900 shadow-2xl animate-in zoom-in-95 duration-200">
+      
+      <div className="flex items-center justify-between px-8 py-5 border-b border-zinc-800">
+        <h3 className="flex items-center gap-2 text-lg font-semibold text-white">
+          <Wand2 className="h-5 w-5 text-emerald-400" />
+          Password Generator
+        </h3>
+        <button
+          onClick={() => setIsGeneratorOpen(false)}
+          className="p-2 text-zinc-500 hover:text-white hover:bg-zinc-800 rounded-lg transition"
+        >
+          <X className="h-5 w-5" />
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-[320px_1fr] gap-10 px-10 py-10">
+
+        <div className="space-y-10">
+          <div className="flex bg-zinc-950 rounded-xl border border-zinc-800 p-1">
+            {(["password", "passphrase", "username"] as const).map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setGenTab(tab)}
+                className={`flex-1  py-2 text-sm font-medium rounded-lg capitalize transition ${
+                  genTab === tab
+                    ? "bg-zinc-800 text-emerald-400"
+                    : "text-zinc-500 hover:text-zinc-300"
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+
+          <div className="space-y-8  ">
+
+            {genTab === "password" && (
+              <>
+                <div>
+                  <div className="flex justify-between text-xs text-zinc-400 mb-2">
+                    <span>Length</span>
+                    <span className="font-mono text-emerald-400">{genLength}</span>
+                  </div>
+                  <input
+                    type="range"
+                    min={8}
+                    max={64}
+                    value={genLength}
+                    onChange={(e) => setGenLength(parseInt(e.target.value))}
+                    className="w-full accent-emerald-500"
+                  />
+                </div>
+
+                <div className="grid grid-cols-3 gap-3">
+                  {[
+                    { label: "ABC", value: genUseUpper, set: setGenUseUpper, text: "Upper" },
+                    { label: "123", value: genUseNumbers, set: setGenUseNumbers, text: "Numbers" },
+                    { label: "#$%", value: genUseSymbols, set: setGenUseSymbols, text: "Symbols" },
+                  ].map((opt) => (
+                    <button
+                      key={opt.text}
+                      onClick={() => opt.set(!opt.value)}
+                      className={`rounded-xl p-4 border transition ${
+                        opt.value
+                          ? "bg-emerald-500/10 border-emerald-500/40 text-emerald-400"
+                          : "bg-zinc-950 border-zinc-800 text-zinc-500 hover:bg-zinc-900"
+                      }`}
+                    >
+                      <div className="text-lg font-bold">{opt.label}</div>
+                      <div className="text-[10px] uppercase tracking-wider opacity-70">
+                        {opt.text}
+                      </div>
                     </button>
+                  ))}
                 </div>
-                
-                <div className="p-6">
-                    <GeneratorContent />
+              </>
+            )}
+
+            {genTab === "passphrase" && (
+              <>
+                <div>
+                  <div className="flex justify-between text-xs text-zinc-400 mb-2">
+                    <span>Words</span>
+                    <span className="font-mono text-emerald-400">{ppWordCount}</span>
+                  </div>
+                  <input
+                    type="range"
+                    min={3}
+                    max={8}
+                    value={ppWordCount}
+                    onChange={(e) => setPpWordCount(parseInt(e.target.value))}
+                    className="w-full accent-emerald-500"
+                  />
                 </div>
-             </div>
+
+                <div className="flex gap-2">
+                  {["-", "_", ".", " "].map((sep) => (
+                    <button
+                      key={sep}
+                      onClick={() => setPpSeparator(sep)}
+                      className={`flex-1 py-2 rounded-lg text-sm font-medium transition ${
+                        ppSeparator === sep
+                          ? "bg-zinc-800 text-white"
+                          : "text-zinc-500 hover:bg-zinc-900"
+                      }`}
+                    >
+                      {sep === " " ? "Space" : sep}
+                    </button>
+                  ))}
+                </div>
+
+                <button
+                  onClick={() => setPpCapitalize(!ppCapitalize)}
+                  className={`flex items-center justify-between p-4 rounded-xl border transition ${
+                    ppCapitalize
+                      ? "bg-emerald-500/10 border-emerald-500/40 text-emerald-400"
+                      : "bg-zinc-950 border-zinc-800 text-zinc-500"
+                  }`}
+                >
+                  Capitalize words
+                  {ppCapitalize && <Check className="w-4 h-4" />}
+                </button>
+              </>
+            )}
+
+            {genTab === "username" && (
+              <button
+                onClick={() => setUnIncludeNumber(!unIncludeNumber)}
+                className={`flex items-center justify-between p-4 rounded-xl border transition ${
+                  unIncludeNumber
+                    ? "bg-emerald-500/10 border-emerald-500/40 text-emerald-400"
+                    : "bg-zinc-950 border-zinc-800 text-zinc-500"
+                }`}
+              >
+                Include number suffix
+                {unIncludeNumber && <Check className="w-4 h-4" />}
+              </button>
+            )}
+          </div>
         </div>
-      )}
+
+        <div className="flex flex-col justify-between">
+          <div className="bg-zinc-950 rounded-3xl border border-zinc-800 p-10 flex flex-col items-center justify-center text-center min-h-[260px]">
+           <div
+  className={`
+    ${getPasswordStyle(generatedResult.length)}
+    font-mono
+    font-bold
+    text-transparent
+    bg-gradient-to-r
+    from-white
+    to-zinc-400
+    bg-clip-text
+    text-center
+    w-full
+    overflow-hidden
+    break-all
+    leading-tight
+    transition-all
+    duration-200
+  `}
+>
+  {generatedResult}
+</div>
+
+
+            <div className="flex gap-6 mt-10">
+              <button
+                onClick={runGenerator}
+                className="text-sm text-zinc-400 hover:text-white transition"
+              >
+                Regenerate
+              </button>
+              <button
+                onClick={() => copyToClipboard(generatedResult)}
+                className="text-sm text-zinc-400 hover:text-white transition"
+              >
+                Copy
+              </button>
+            </div>
+          </div>
+
+          <button
+            onClick={useGeneratedResult}
+            className="mt-8 bg-emerald-600 hover:bg-emerald-500 text-white py-3 rounded-xl text-sm font-medium transition"
+          >
+            Use {genTab === "username" ? "Username" : "Password"}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
 
       {selectedItem && !isGeneratorOpen && (
         <div className="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm flex items-center justify-center z-50 animate-in fade-in duration-200">
