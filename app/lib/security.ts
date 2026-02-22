@@ -9,7 +9,7 @@ export async function deriveKey(password: string, salt: string): Promise<string>
       iterations: 3,
       memorySize: 65536, 
       hashLength: 32,
-      outputType: 'encoded',
+      outputType: 'hex',
     }); 
     return result;
   } catch (error) {

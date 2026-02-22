@@ -53,7 +53,7 @@ export default function Home() {
   ];
 
   return (
-  <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-white pt-6"> 
+  <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-white pt-5"> 
       <Navbar />
       <main className="relative overflow-hidden bg-gradient-to-b from-[#0b1224] via-[#070c18] to-[#04070f]">
         <div className="pointer-events-none absolute -left-20 top-10 h-96 w-96 rotate-12 bg-gradient-to-br from-blue-500 via-cyan-400 to-purple-500 opacity-30 blur-3xl" />
