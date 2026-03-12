@@ -82,7 +82,7 @@ export default function Home() {
                     variant="outline"
                     className="h-12 text-white cursor-pointer rounded-xl border-white/20 bg-white/5 px-6 text-base font-semibold text-white transition hover:-translate-y-0.5  hover:border-white/40 hover:text-cyan-400 hover:bg-white/10"
                   >
-                    Sign up
+                    Login
                   </Button>
                 </Link>
               </div>
