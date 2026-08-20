@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { encrypt, decrypt } from "@/app/lib/crypto-client";
 import { generatePassword, generatePassphrase, generateUsername } from "@/app/lib/generator";
+import { useVaultKey } from "@/app/context/VaultKeyContext";
 
 import { Sidebar } from "@/components/dashboard/Sidebar";
 import { VaultHeader } from "@/components/dashboard/VaultHeader";
@@ -16,11 +17,11 @@ import { Item, ViewMode, ActiveView, GenTab } from "./types";
 
 export default function Dashboard() {
   const router = useRouter();
+  const { vaultKey, clearVaultKey } = useVaultKey();
   
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
   const [userEmail, setUserEmail] = useState("");
-  const [masterPassword, setMasterPassword] = useState("");
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All items"); 
   const [activeView, setActiveView] = useState<ActiveView>("vault"); 
@@ -59,17 +60,15 @@ export default function Dashboard() {
 
   useEffect(() => {
     const email = localStorage.getItem("userEmail");
-    const mp = sessionStorage.getItem("masterPassword");
     
-    if (!email || !mp) {
+    if (!email || !vaultKey) {
       router.push("/auth/login");
       return;
     }
     setUserEmail(email);
-    setMasterPassword(mp);
-    fetchItems(email, mp);
+    fetchItems(email, vaultKey);
     runGenerator(); 
-  }, [router]);
+  }, [router, vaultKey]);
 
   useEffect(() => {
     runGenerator();
@@ -123,21 +122,22 @@ export default function Dashboard() {
 
   const handleLogout = () => {
     localStorage.removeItem("userEmail");
-    sessionStorage.removeItem("masterPassword");
+    clearVaultKey();
     router.push("/auth/login");
   };
 
   const handleAddItem = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!vaultKey) return;
     setSaving(true);
     try {
       const encryptedItem = {
           ...newItem,
-          username: encrypt(newItem.username || "", masterPassword),
-          password: encrypt(newItem.password || "", masterPassword),
-          url: encrypt(newItem.url || "", masterPassword),
-          notes: encrypt(newItem.notes || "", masterPassword),
-          item_metadata: encrypt(JSON.stringify(newItem.item_metadata || {}), masterPassword)
+          username: encrypt(newItem.username || "", vaultKey),
+          password: encrypt(newItem.password || "", vaultKey),
+          url: encrypt(newItem.url || "", vaultKey),
+          notes: encrypt(newItem.notes || "", vaultKey),
+          item_metadata: encrypt(JSON.stringify(newItem.item_metadata || {}), vaultKey)
       };
 
       const res = await fetch("/api/items", {
@@ -149,7 +149,7 @@ export default function Dashboard() {
       if (res.ok) {
         setIsModalOpen(false);
         setNewItem({ id: 0, name: "", username: "", password: "", url: "", type: "Login", notes: "", item_metadata: {} });
-        fetchItems(userEmail, masterPassword);
+        fetchItems(userEmail, vaultKey);
       } else {
         const errorData = await res.json();
         alert(`Failed to add item: ${errorData.message || errorData.error}`);
@@ -164,16 +164,16 @@ export default function Dashboard() {
 
   const handleUpdateItem = async (e: React.FormEvent) => {
       e.preventDefault();
-      if (!editFormData) return;
+      if (!editFormData || !vaultKey) return;
       setSaving(true);
       try {
         const encryptedItem = {
             ...editFormData,
-            username: encrypt(editFormData.username || "", masterPassword),
-            password: encrypt(editFormData.password || "", masterPassword),
-            url: encrypt(editFormData.url || "", masterPassword),
-            notes: encrypt(editFormData.notes || "", masterPassword),
-            item_metadata: encrypt(JSON.stringify(editFormData.item_metadata || {}), masterPassword)
+            username: encrypt(editFormData.username || "", vaultKey),
+            password: encrypt(editFormData.password || "", vaultKey),
+            url: encrypt(editFormData.url || "", vaultKey),
+            notes: encrypt(editFormData.notes || "", vaultKey),
+            item_metadata: encrypt(JSON.stringify(editFormData.item_metadata || {}), vaultKey)
         };
 
         const res = await fetch("/api/items", {
@@ -185,7 +185,7 @@ export default function Dashboard() {
         if (res.ok) {
             setIsEditing(false);
             setSelectedItem(editFormData); 
-            fetchItems(userEmail, masterPassword); 
+            fetchItems(userEmail, vaultKey); 
         } else {
             const errorData = await res.json();
             alert(`Failed to update item: ${errorData.message || errorData.error}`);

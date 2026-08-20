@@ -1,4 +1,6 @@
   import { adjectives, nouns, passphraseWords } from "@/app/lib/words";
+import Head from "next/head";
+import { PiNuclearPlantLight } from "react-icons/pi";
 
   export const generatePassword = (genUseUpper: boolean, genUseNumbers: boolean, genUseSymbols: boolean, genLength: number) => {
       const lower = "abcdefghijklmnopqrstuvwxyz";
@@ -17,6 +19,7 @@
       }
       return pass;
     };
+
 
     export const generatePassphrase = (ppWordCount: number, ppCapitalize: boolean, ppSeparator: string) => {
         let words = [];

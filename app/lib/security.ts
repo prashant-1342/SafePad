@@ -26,3 +26,4 @@ export async function deriveAuthHash(password: string, email: string): Promise<s
 export async function deriveEncryptionKey(password: string, email: string): Promise<string> {
   return deriveKey(password, `${email.toLowerCase()}_safepad_enc_v1`);
 }
+  

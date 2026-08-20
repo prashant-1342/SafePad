@@ -4,9 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { useVaultKey } from "@/app/context/VaultKeyContext";
 
 export default function Login() {
   const router = useRouter();
+  const { setVaultKey } = useVaultKey();
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [masterpassword, setMasterPassword] = useState("");
@@ -81,7 +83,7 @@ export default function Login() {
 
       if (res.ok) {
         localStorage.setItem("userEmail", email);
-        sessionStorage.setItem("masterPassword", encryptionKey);
+        setVaultKey(encryptionKey);
         router.push("/dashboard");
       } else {
         alert("Wrong Master Password");

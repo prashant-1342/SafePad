@@ -2,7 +2,7 @@ import { X, ChevronRight, Key, Wand2 } from "lucide-react";
 import { Item } from "@/app/dashboard/types";
 import { renderFormFields } from "../utils";
 
-interface AddItemModalProps {
+interface AddItemModalProps{ 
   isOpen: boolean;
   onClose: () => void;
   newItem: Item;
@@ -11,6 +11,7 @@ interface AddItemModalProps {
   onAdd: (e: React.FormEvent) => void;
   onOpenGenerator: (context: "modal-new") => void;
 }
+
 
 export const AddItemModal = ({
   isOpen,

@@ -45,6 +45,8 @@ export default function Home() {
     };
     fetchStats();
   }, []);
+   
+ 
 
   const stats = [
     { label: "Vault items stored", value: vaultCount },
